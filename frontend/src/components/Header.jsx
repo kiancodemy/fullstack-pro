@@ -17,7 +17,7 @@ import { Link as routerr } from "react-router-dom";
 import { useState } from "react";
 
 function Header() {
-  let [anchorElUser, setAnchorElUser] = React.useState(null);
+  let [anchorElUser, setAnchorElUser] = useState(null);
   let open = Boolean(anchorElUser);
   const handler = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -62,7 +62,7 @@ function Header() {
           >
             <Button
               component={routerr}
-              to="/dd"
+              to="/card"
               sx={{
                 color: "#EEEEEE",
                 "&:hover": { color: "#eeee" },
@@ -73,6 +73,7 @@ function Header() {
               cart
             </Button>
             <Button
+              to="/signin"
               component={routerr}
               sx={{
                 color: "#EEEEEE",
