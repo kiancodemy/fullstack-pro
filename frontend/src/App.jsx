@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 
@@ -7,7 +8,7 @@ export default function App() {
     <BrowserRouter>
       <div>
         <Header></Header>
-        <h1>hu</h1>
+        <Footer></Footer>
       </div>
     </BrowserRouter>
   );

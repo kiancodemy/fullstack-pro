@@ -1,9 +1,12 @@
+import React from "react";
 import {
   AppBar,
   Toolbar,
   Button,
   Box,
   Stack,
+  MenuItem,
+  Menu,
   Typography,
   IconButton,
 } from "@mui/material";
@@ -11,8 +14,19 @@ import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link as routerr } from "react-router-dom";
+import { useState } from "react";
 
 function Header() {
+  let [anchorElUser, setAnchorElUser] = React.useState(null);
+  let open = Boolean(anchorElUser);
+  const handler = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleclose = () => {
+    setAnchorElUser(null);
+  };
+
   return (
     <Box flexGrow={1}>
       <AppBar
@@ -41,7 +55,7 @@ function Header() {
           </Typography>
           <Stack
             spacing={3}
-            direction={"row"}
+            direction="row"
             sx={{
               display: { xs: "none", md: "block" },
             }}
@@ -59,6 +73,7 @@ function Header() {
               cart
             </Button>
             <Button
+              component={routerr}
               sx={{
                 color: "#EEEEEE",
                 "&:hover": { color: "#eeee" },
@@ -70,6 +85,7 @@ function Header() {
             </Button>
           </Stack>
           <IconButton
+            onClick={handler}
             aria-label="menue"
             sx={{ display: { xs: "static", md: "none", color: "#eeee" } }}
           >
@@ -77,6 +93,44 @@ function Header() {
           </IconButton>
         </Toolbar>
       </AppBar>
+      <Menu
+        sx={{ display: { xs: "block", md: "none" } }}
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        onClose={handleclose}
+        open={open}
+      >
+        <MenuItem onClick={handleclose}>
+          <Button
+            component={routerr}
+            to="/dd"
+            sx={{
+              color: "#222831",
+
+              fontSize: "14px",
+            }}
+            startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
+          >
+            cart
+          </Button>
+        </MenuItem>
+        <MenuItem onClick={handleclose}>
+          <Button
+            component={routerr}
+            sx={{
+              color: "#222831",
+
+              fontSize: "14px",
+            }}
+            startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+          >
+            signin
+          </Button>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }
