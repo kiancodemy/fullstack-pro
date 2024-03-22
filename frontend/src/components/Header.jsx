@@ -43,9 +43,10 @@ function Header() {
           <Typography
             sx={{
               fontSize: {
-                xs: "14px",
+                xs: "16px",
                 flexGrow: 1,
                 md: "20px",
+                fontweight: "bold",
                 textTransform: "capitalize",
                 color: "#EEEEEE",
               },

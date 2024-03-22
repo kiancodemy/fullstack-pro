@@ -7,7 +7,6 @@ import {
   CardContent,
   Rating,
   Link,
-  CardActions,
   Card,
   CardMedia,
 } from "@mui/material";
@@ -76,11 +75,12 @@ function Homescreen() {
                       <Typography
                         sx={{
                           paddingY: "10px",
+                          fontSize: "18px",
                           color: "#31363F",
                           fontWeight: "bold",
                         }}
                       >
-                        {item.price}$
+                        $ {item.price}
                       </Typography>
                     </CardContent>
                   </Card>
