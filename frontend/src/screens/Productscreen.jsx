@@ -1,5 +1,6 @@
 import products from "../../products";
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Link,
   Rating,
@@ -7,7 +8,6 @@ import {
   Container,
   Divider,
   Button,
-  CardHeader,
   Grid,
   Typography,
   Card,
@@ -16,9 +16,18 @@ import {
 } from "@mui/material";
 
 import { Link as routerr } from "react-router-dom";
+import axios from "axios";
+
 function Productscreen() {
   const { id: productid } = useParams();
-  const finder = products.find((item) => item._id === productid);
+  const [finder, setProducts] = useState([]);
+  useEffect(() => {
+    const get = async () => {
+      const { data } = await axios.get(`/api/data/${productid}`);
+      setProducts(data);
+    };
+    get();
+  }, []);
 
   return (
     <Container sx={{ paddingY: "20px" }}>
