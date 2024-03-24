@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: "1",
     name: "iPhone 13 Pro 256GB Memory",
     image: "/images/phone.jpg",
     brand: "Apple",
@@ -13,7 +12,6 @@ const products = [
     countInStock: 7,
   },
   {
-    _id: "2",
     name: "Airpods Wireless Bluetooth Headphones",
     image: "/images/airpods.jpg",
     brand: "Apple",
@@ -26,7 +24,6 @@ const products = [
     countInStock: 10,
   },
   {
-    _id: "3",
     name: "Cannon EOS 80D DSLR Camera",
     image: "/images/camera.jpg",
     brand: "Cannon",
@@ -39,7 +36,6 @@ const products = [
     countInStock: 5,
   },
   {
-    _id: "4",
     name: "Logitech G-Series Gaming Mouse",
     image: "/images/mouse.jpg",
     brand: "Logitech",
@@ -52,7 +48,6 @@ const products = [
     countInStock: 7,
   },
   {
-    _id: "5",
     name: "Amazon Echo Dot 3rd Generation",
     image: "/images/alexa.jpg",
     brand: "Amazon",
@@ -65,7 +60,6 @@ const products = [
     countInStock: 0,
   },
   {
-    _id: "6",
     name: "Sony Playstation 5",
     image: "/images/playstation.jpg",
     brand: "Sony",
