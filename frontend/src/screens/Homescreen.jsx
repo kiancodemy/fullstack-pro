@@ -10,22 +10,20 @@ import {
   Card,
   CardMedia,
 } from "@mui/material";
+import { useGetproductsQuery } from "../slices/productionapi";
 
-import { useState, useEffect } from "react";
 import { Link as routerr } from "react-router-dom";
-import product from "../../products";
-import axios from "axios";
-function Homescreen() {
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    const get = async () => {
-      const { data } = await axios.get("/api/data");
-      setProducts(data);
-    };
-    get();
-  }, []);
+import Loading from "../components/loading";
 
-  return (
+import Error from "../components/Error";
+function Homescreen() {
+  const { data: products, error, isLoading } = useGetproductsQuery();
+
+  return error ? (
+    <Error message={error}></Error>
+  ) : isLoading ? (
+    <Loading></Loading>
+  ) : (
     <Box sx={{ flexGrow: 1, paddingY: "10px" }}>
       <Container>
         <Typography

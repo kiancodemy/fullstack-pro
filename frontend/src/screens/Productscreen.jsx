@@ -1,4 +1,3 @@
-import products from "../../products";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -16,20 +15,19 @@ import {
 } from "@mui/material";
 
 import { Link as routerr } from "react-router-dom";
-import axios from "axios";
+import { useGetproductsbyidQuery } from "../slices/productionapi";
+import Loading from "../components/loading";
+import Error from "../components/Error";
 
 function Productscreen() {
   const { id: productid } = useParams();
-  const [finder, setProducts] = useState([]);
-  useEffect(() => {
-    const get = async () => {
-      const { data } = await axios.get(`/api/data/${productid}`);
-      setProducts(data);
-    };
-    get();
-  }, []);
+  const { data: finder, error, isLoading } = useGetproductsbyidQuery(productid);
 
-  return (
+  return error ? (
+    <Error message={error}></Error>
+  ) : isLoading ? (
+    <Loading></Loading>
+  ) : (
     <Container sx={{ paddingY: "20px" }}>
       <Button
         variant="contained"

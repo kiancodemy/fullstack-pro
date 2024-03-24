@@ -8,7 +8,7 @@ const getall = async (req, res) => {
     res.json(all);
   } catch (err) {
     res.status(404).json({
-      message: `the error is ${err}`,
+      message: `You faced Error it is ${err}`,
     });
   }
 };
