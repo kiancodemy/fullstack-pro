@@ -4,20 +4,26 @@ import {
   Toolbar,
   Button,
   Box,
+  Badge,
   Stack,
   MenuItem,
   Menu,
   Typography,
   IconButton,
 } from "@mui/material";
+
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useSelector } from "react-redux";
 import { Link as routerr } from "react-router-dom";
 import { useState } from "react";
 
 function Header() {
   let [anchorElUser, setAnchorElUser] = useState(null);
+  const count = useSelector((state) =>
+    state.cart.cartItems.reduce((acc, a) => acc + a.qty, 0)
+  );
   let open = Boolean(anchorElUser);
   const handler = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -33,7 +39,7 @@ function Header() {
         sx={{
           position: "static",
           marginTop: "15px",
-          px: "10px",
+          paddingY: "5px",
 
           borderRadius: "5px",
           bgcolor: "#222831",
@@ -61,18 +67,21 @@ function Header() {
               display: { xs: "none", md: "block" },
             }}
           >
-            <Button
-              component={routerr}
-              to="/card"
-              sx={{
-                color: "#EEEEEE",
-                "&:hover": { color: "#eeee" },
-                fontSize: "14px",
-              }}
-              startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
-            >
-              cart
-            </Button>
+            <Badge badgeContent={count} color="primary">
+              <Button
+                component={routerr}
+                to="/card"
+                sx={{
+                  color: "#EEEEEE",
+                  "&:hover": { color: "#eeee" },
+                  fontSize: "14px",
+                }}
+                startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
+              >
+                cart
+              </Button>
+            </Badge>
+
             <Button
               to="/signin"
               component={routerr}

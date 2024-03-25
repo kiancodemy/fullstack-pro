@@ -1,5 +1,3 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import {
   Link,
   Rating,
@@ -10,18 +8,38 @@ import {
   Grid,
   Typography,
   Card,
+  MenuItem,
+  FormControl,
   CardContent,
+  InputLabel,
   Paper,
+  Select,
 } from "@mui/material";
 
 import { Link as routerr } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useGetproductsbyidQuery } from "../slices/productionapi";
 import Loading from "../components/loading";
 import Error from "../components/Error";
+import { addtToCart } from "../slices/cardslice";
 
 function Productscreen() {
+  const dispatch = useDispatch();
   const { id: productid } = useParams();
   const { data: finder, error, isLoading } = useGetproductsbyidQuery(productid);
+  const navigate = useNavigate();
+  const [Quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    dispatch(addtToCart({ ...finder, qty: Number(Quantity) }));
+  };
+
+  const handleChange = (event) => {
+    setQuantity(Number(event.target.value));
+  };
 
   return error ? (
     <Error message={error}></Error>
@@ -110,19 +128,53 @@ function Productscreen() {
                   {finder.countInStock > 0 ? "Available" : "Unavailable"}
                 </Typography>
                 <Divider></Divider>
-                <Button
-                  sx={{
-                    marginTop: "10px",
-                    backgroundColor: "#31363F",
-                    color: "white",
-                    textTransform: "capitalize",
-                    "&:hover": { backgroundColor: "#363062" },
-                  }}
-                  to="/card"
-                  component={routerr}
-                >
-                  Add to cart
-                </Button>
+                {finder.countInStock > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      paddingY: "10px",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <Button
+                      onClick={handleAddToCart}
+                      sx={{
+                        marginTop: "10px",
+                        backgroundColor: "#31363F",
+                        color: "white",
+
+                        textTransform: "capitalize",
+                        "&:hover": { backgroundColor: "#363062" },
+                      }}
+                      to="/card"
+                      component={routerr}
+                    >
+                      Add to cart
+                    </Button>
+                    <FormControl
+                      size="small"
+                      sx={{
+                        m: 1,
+                        paddingTop: "5px",
+
+                        minWidth: 80,
+                      }}
+                    >
+                      <Select
+                        labelId="demo-simple-select-autowidth-label"
+                        id="demo-simple-select-autowidth"
+                        value={Quantity}
+                        onChange={handleChange}
+                        label="quantity"
+                      >
+                        {[...Array(finder.countInStock).keys()].map((item) => (
+                          <MenuItem value={item + 1}>{item + 1}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                )}
               </CardContent>
             </Card>
           </Paper>
