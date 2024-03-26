@@ -17,5 +17,8 @@ userschema.pre("save", async function (next) {
   console.log("pass");
   next();
 });
+userschema.method("passfiner", async function (pass) {
+  return await bcrypt.compare(pass, this.password);
+});
 const User = mongoose.model("User", userschema);
 export default User;
