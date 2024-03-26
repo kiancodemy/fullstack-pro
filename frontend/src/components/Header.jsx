@@ -8,6 +8,7 @@ import {
   Stack,
   MenuItem,
   Menu,
+  Container,
   Typography,
   IconButton,
 } from "@mui/material";
@@ -21,9 +22,8 @@ import { useState } from "react";
 
 function Header() {
   let [anchorElUser, setAnchorElUser] = useState(null);
-  const count = useSelector((state) =>
-    state.cart.cartItems.reduce((acc, a) => acc + a.qty, 0)
-  );
+  const counter = useSelector((state) => state.cart);
+  const count = counter.cartItems.reduce((acc, a) => acc + a.qty, 0);
   let open = Boolean(anchorElUser);
   const handler = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -34,10 +34,11 @@ function Header() {
   };
 
   return (
-    <Box flexGrow={1}>
+    <Container>
       <AppBar
         sx={{
           position: "static",
+
           marginTop: "15px",
           paddingY: "5px",
 
@@ -142,7 +143,7 @@ function Header() {
           </Button>
         </MenuItem>
       </Menu>
-    </Box>
+    </Container>
   );
 }
 

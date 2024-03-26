@@ -32,6 +32,7 @@ function Homescreen() {
             textTransform: "capitalize",
             fontWeight: "bold",
             paddingY: "10px",
+            fontSize: "30px",
             color: "#607274",
           }}
         >

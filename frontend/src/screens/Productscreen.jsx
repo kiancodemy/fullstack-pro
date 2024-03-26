@@ -61,7 +61,11 @@ function Productscreen() {
       </Button>
       <Grid sx={{ paddingY: "20px" }} container spacing={4}>
         <Grid item xs={12} md={4}>
-          <img src={finder.image} height={300} alt="producy-image" />
+          <img
+            src={finder.image}
+            style={{ width: "100%", borderRadius: "10px" }}
+            alt="producy-image"
+          />
         </Grid>
         <Grid item xs={12} md={5}>
           <Card sx={{ paddingTop: "20px", paddingX: "10px" }}>

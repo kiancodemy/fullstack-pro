@@ -5,8 +5,6 @@ const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
   : { cartItems: [] };
 
-const addDecimal = (num) => {};
-
 const cardSlice = createSlice({
   name: "card",
   initialState,
@@ -23,7 +21,14 @@ const cardSlice = createSlice({
       }
       return addTocard(state);
     },
+    deletecart: (state, action) => {
+      const item = action.payload;
+      state.cartItems = state.cartItems.filter(
+        (items) => items._id !== item._id
+      );
+      return addTocard(state);
+    },
   },
 });
-export const { addtToCart } = cardSlice.actions;
+export const { addtToCart, deletecart } = cardSlice.actions;
 export default cardSlice.reducer;
