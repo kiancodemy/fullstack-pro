@@ -13,7 +13,7 @@ export const protect = async (req, res, next) => {
     next();
   } catch (err) {
     res.status(404).json({
-      message: `the error is ${err}`,
+      message: `${err.message}`,
     });
   }
 };
@@ -27,7 +27,7 @@ export const admin = async (req, res, next) => {
     throw new Error("you are not admin");
   } catch (err) {
     res.status(404).json({
-      message: `the error is ${err}`,
+      message: `${err.message}`,
     });
   }
 };

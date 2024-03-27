@@ -1,10 +1,6 @@
-import user from "../models/usermodel.js";
-import jtw from "jsonwebtoken";
-const jwtmaker = (id) => {
-  return jtw.sign({ id: id }, process.env.SECRETPASS, {
-    expiresIn: "2d",
-  });
-};
+import User from "../models/usermodel.js";
+
+import { tokenGenerator } from "../../frontend/src/utils/generatetoken.js";
 
 const authUser = async (req, res) => {
   try {
@@ -13,27 +9,16 @@ const authUser = async (req, res) => {
       throw new Error("you have not enter password or email");
     }
 
-    const myuser = await user.findOne({ email: email });
+    const myuser = await User.findOne({ email: email });
 
     if (myuser && (await myuser.passfiner(password))) {
-      const token = jwtmaker(myuser._id);
-      const cookie = res.cookie("jwt", token, {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        sameSite: "strict",
-      });
-      res.status(200).json({
-        _id: myuser._id,
-        name: myuser.name,
-        email: myuser.email,
-        admin: myuser.isAdmin,
-      });
+      tokenGenerator(res, myuser);
     } else {
       throw new Error("information is not valid");
     }
   } catch (err) {
     res.status(404).json({
-      message: `you face ${err}`,
+      message: `The error happened for ${err}`,
     });
   }
 };
@@ -43,7 +28,23 @@ const getUsers = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-  res.send("getUserProfile");
+  try {
+    const find = await User.findById(req.user._id);
+    if (!find) {
+      throw new Error("there is a error");
+    }
+
+    res.status(201).json({
+      _id: find._id,
+      name: find.name,
+      email: find.email,
+      admin: find.isAdmin,
+    });
+  } catch (err) {
+    res.status(404).json({
+      message: `${err.message}`,
+    });
+  }
 };
 
 const logoutUser = async (req, res) => {
@@ -57,11 +58,54 @@ const logoutUser = async (req, res) => {
 };
 
 const updateUserProfil = async (req, res) => {
-  res.send("updateUserProfil");
+  try {
+    const find = await User.findById(req.user._id);
+    if (!find) {
+      throw new Error("it is not found");
+    }
+
+    find.email = req.body.email || find.email;
+    find.name = req.body.name || find.name;
+    if (req.body.password) {
+      find.password = req.body.password || find.password;
+    }
+    const updated = await find.save();
+    res.status(201).json({
+      _id: updated._id,
+      name: updated.name,
+      email: updated.email,
+      admin: updated.isAdmin,
+    });
+  } catch (err) {
+    res.status(404).json({
+      message: `${err.message}`,
+    });
+  }
 };
 
 const registerUser = async (req, res) => {
-  res.send("registeruser");
+  try {
+    const { name, password, email } = req.body;
+    const finder = await User.findOne({ email });
+    if (finder) {
+      throw new Error("user already exist");
+    }
+    const user = await User.create({ name, password, email });
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        admin: user.isAdmin,
+      });
+    } else {
+      throw new Error("invalid user data");
+    }
+  } catch (err) {
+    res.status(404).json({
+      message: `${err.message}`,
+    });
+  }
 };
 const deleteUser = async (req, res) => {
   res.send("deleteUser  ");
