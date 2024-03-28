@@ -10,10 +10,13 @@ const userApiSlice = apislice.injectEndpoints({
         body: data,
       }),
     }),
-    getproductsbyid: build.query({
-      query: (id) => `/data/${id}`,
-      keepUnusedDataFor: 5,
+    logout: build.mutation({
+      //
+      query: () => ({
+        url: `/users/logout`,
+        method: "POST",
+      }),
     }),
   }),
 });
-export const { useLoginMutation } = userApiSlice;
+export const { useLoginMutation, useLogoutMutation } = userApiSlice;

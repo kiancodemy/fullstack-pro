@@ -8,7 +8,7 @@ const store = configureStore({
     [apislice.reducerPath]: apislice.reducer,
 
     cart: cartslice,
-    userinfo: auth,
+    auth: auth,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apislice.middleware),

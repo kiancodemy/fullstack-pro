@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   AppBar,
   Toolbar,
@@ -16,14 +17,20 @@ import {
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useLogoutMutation } from "../slices/userApiSlice";
+import logout from "../slices/authslice";
 import { Link as routerr } from "react-router-dom";
 import { useState } from "react";
 
 function Header() {
+  const dispatch = useDispatch();
   let [anchorElUser, setAnchorElUser] = useState(null);
   const counter = useSelector((state) => state.cart);
+  const { userinfo } = useSelector((state) => state.auth);
   const count = counter.cartItems.reduce((acc, a) => acc + a.qty, 0);
+  const [out] = useLogoutMutation();
   let open = Boolean(anchorElUser);
   const handler = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -32,7 +39,15 @@ function Header() {
   const handleclose = () => {
     setAnchorElUser(null);
   };
-
+  const handleLogOut = async () => {
+    try {
+      await out().unwrap();
+      dispatch(logout());
+      Navigate("/login");
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <Container>
       <AppBar
@@ -83,18 +98,47 @@ function Header() {
               </Button>
             </Badge>
 
-            <Button
-              to="/signin"
-              component={routerr}
-              sx={{
-                color: "#EEEEEE",
-                "&:hover": { color: "#eeee" },
-                fontSize: "14px",
-              }}
-              startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
-            >
-              signin
-            </Button>
+            {!userinfo ? (
+              <Button
+                to="/login"
+                component={routerr}
+                sx={{
+                  color: "#EEEEEE",
+                  "&:hover": { color: "#eeee" },
+                  fontSize: "14px",
+                }}
+                startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+              >
+                signin
+              </Button>
+            ) : (
+              <>
+                <Button
+                  to="/profile"
+                  component={routerr}
+                  sx={{
+                    color: "#EEEEEE",
+                    "&:hover": { color: "#eeee" },
+                    fontSize: "14px",
+                  }}
+                  startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+                >
+                  Profile
+                </Button>
+                <Button
+                  onClick={handleLogOut}
+                  sx={{
+                    color: "#EEEEEE",
+                    "&:hover": { color: "#eeee" },
+                    fontSize: "14px",
+                  }}
+                  startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+                >
+                  Logout
+                </Button>
+                <Typography>{userinfo.name}</Typography>
+              </>
+            )}
           </Stack>
           <IconButton
             onClick={handler}
@@ -118,30 +162,61 @@ function Header() {
         <MenuItem onClick={handleclose}>
           <Button
             component={routerr}
-            to="/dd"
+            to="/cart"
             sx={{
               color: "#222831",
 
-              fontSize: "14px",
+              fontSize: "12px",
             }}
             startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
           >
             cart
           </Button>
         </MenuItem>
-        <MenuItem onClick={handleclose}>
-          <Button
-            component={routerr}
-            sx={{
-              color: "#222831",
+        {userinfo ? (
+          <MenuItem onClick={handleclose}>
+            <Button
+              component={routerr}
+              sx={{
+                color: "#222831",
 
-              fontSize: "14px",
-            }}
-            startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
-          >
-            signin
-          </Button>
-        </MenuItem>
+                fontSize: "12px",
+              }}
+              startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+            >
+              signin
+            </Button>
+          </MenuItem>
+        ) : (
+          <>
+            <MenuItem onClick={handleclose}>
+              <Button
+                component={routerr}
+                sx={{
+                  color: "#222831",
+
+                  fontSize: "12px",
+                }}
+                startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+              >
+                Profile
+              </Button>
+            </MenuItem>
+            <MenuItem onClick={handleclose}>
+              <Button
+                component={routerr}
+                sx={{
+                  color: "#222831",
+
+                  fontSize: "12px",
+                }}
+                startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+              >
+                Logout
+              </Button>
+            </MenuItem>
+          </>
+        )}
       </Menu>
     </Container>
   );

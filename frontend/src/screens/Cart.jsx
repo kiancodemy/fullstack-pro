@@ -158,6 +158,7 @@ function Cart() {
             {AllProducts}
           </Stack>
         </Grid>
+
         <Grid xs={12} md={4} item>
           <Paper sx={{ padding: "10px" }} elevation={2}>
             <Stack direction={"column"} spacing={2} sx={{ paddingY: "10px" }}>
@@ -165,7 +166,7 @@ function Cart() {
                 sx={{
                   fontWeight: "bold",
                   fontSize: "30px",
-                  fontWeight: "bold",
+
                   color: "#222831",
                 }}
               >

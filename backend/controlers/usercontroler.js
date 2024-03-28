@@ -14,11 +14,11 @@ const authUser = async (req, res) => {
     if (myuser && (await myuser.passfiner(password))) {
       tokenGenerator(res, myuser);
     } else {
-      throw new Error("information is not valid");
+      throw new Error("Information is not valid");
     }
   } catch (err) {
     res.status(404).json({
-      message: `The error happened for ${err}`,
+      message: `${err.message}`,
     });
   }
 };
