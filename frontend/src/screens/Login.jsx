@@ -48,7 +48,7 @@ function Login() {
         navigate(redirect);
       } catch (err) {
         toast.error(err?.data?.message, {
-          position: "bottom-left",
+          position: "top-right",
         });
       }
     }

@@ -177,7 +177,7 @@ function Header() {
           <MenuItem onClick={handleclose}>
             <Button
               component={routerr}
-              to="/cart"
+              to="/card"
               sx={{
                 color: "#222831",
 

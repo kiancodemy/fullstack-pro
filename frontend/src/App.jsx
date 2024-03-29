@@ -10,6 +10,9 @@ import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Shippingscreen from "./screens/Shippingscreen";
+import Private from "./components/Private";
+import Paymentscreen from "./screens/Paymentscreen";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -21,7 +24,11 @@ export default function App() {
         <Route path="/card" element={<Cart />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
-        <Route path="/shipping" element={<Shippingscreen />}></Route>
+        <Route path="/payment" element={<Paymentscreen />}></Route>
+
+        <Route path="" element={<Private />}>
+          <Route path="/shipping" element={<Shippingscreen />}></Route>
+        </Route>
       </Routes>
       <ToastContainer
         transition={Zoom}

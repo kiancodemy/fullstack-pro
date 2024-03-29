@@ -9,10 +9,12 @@ import {
 } from "@mui/material";
 import { Link as routerr } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { saveShippingAdress } from "../slices/cardslice";
 import { useDispatch, useSelector } from "react-redux";
+import CheckoutNavbar from "../components/Checkout";
 
 import { useForm } from "react-hook-form";
 function Shippingscreen() {
@@ -23,13 +25,51 @@ function Shippingscreen() {
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
+  const navigate = useNavigate();
+  const dipatch = useDispatch();
+  const { shippingAddress } = useSelector((state) => state.cart);
+  const onSubmit = async (data) => {
+    if (isValid) {
+      try {
+        dipatch(saveShippingAdress(data));
+        navigate("/payment");
+      } catch (err) {
+        toast.error(err?.message, {
+          position: "bottom-left",
+        });
+      }
+    }
+  };
+
   return (
-    <Container sx={{ marginTop: "30px" }}>
+    <Container
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ marginTop: "30px" }}
+    >
+      <Button
+        to="/"
+        sx={{
+          background: "#124076",
+          textTransform: "capitalize",
+          marginBottom: "20px",
+
+          color: "white",
+
+          "&:hover": {
+            background: "#00224D",
+          },
+        }}
+        component={routerr}
+      >
+        Go back
+      </Button>
       <Stack
         direction={"column"}
         gap={1}
         sx={{ maxWidth: "500px", margin: "auto" }}
       >
+        <CheckoutNavbar step={1}></CheckoutNavbar>
         <Typography
           sx={{
             fontSize: { lg: "35px", xs: "20px" },
@@ -44,6 +84,7 @@ function Shippingscreen() {
           address
         </Typography>
         <TextField
+          defaultValue={shippingAddress.address || ""}
           id="outlined"
           label="Enter address"
           type="text"
@@ -75,6 +116,7 @@ function Shippingscreen() {
           id="outlined"
           label="Enter city"
           type="text"
+          defaultValue={shippingAddress.city || ""}
           variant="outlined"
           autoComplete="current-password"
           InputLabelProps={{ style: { color: "#496989" } }}
@@ -103,6 +145,7 @@ function Shippingscreen() {
           label="Enter postal code"
           type="text"
           variant="outlined"
+          defaultValue={shippingAddress.postalcode || ""}
           autoComplete="current-password"
           InputLabelProps={{ style: { color: "#496989" } }}
           sx={{
@@ -129,6 +172,7 @@ function Shippingscreen() {
           id="outlined"
           label="Enter country"
           type="text"
+          defaultValue={shippingAddress.country || ""}
           variant="outlined"
           autoComplete="current-password"
           InputLabelProps={{ style: { color: "#496989" } }}

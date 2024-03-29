@@ -32,7 +32,12 @@ const cardSlice = createSlice({
       state.shippingAddress = action.payload;
       return addTocard(state);
     },
+    savepayment: (state, action) => {
+      state.paymentmethod = action.payload;
+      return addTocard(state);
+    },
   },
 });
-export const { addtToCart, deletecart, saveShippingAdress } = cardSlice.actions;
+export const { addtToCart, deletecart, saveShippingAdress, savepayment } =
+  cardSlice.actions;
 export default cardSlice.reducer;

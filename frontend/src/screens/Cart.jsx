@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import {
   Container,
   Grid,
@@ -25,97 +26,93 @@ function Cart() {
   const total = useSelector((state) =>
     state.cart.cartItems.reduce((acc, item) => acc + item.qty, 0)
   );
-  let AllProducts = useSelector((state) =>
-    state.cart.cartItems.length === 0 ? (
-      <Typography
-        sx={{
-          textTransform: "capitalize",
-          paddingY: "20px",
-          color: "#222831",
-
-          fontSize: "30px",
-          fontWeight: "bold",
-        }}
-      >
-        cartitems is empty
-      </Typography>
-    ) : (
-      state.cart.cartItems.map((item) => {
-        return (
-          <Grid
-            key={item.name}
-            spacing={2}
-            container
-            sx={{
-              paddingBottom: "15px",
-
-              paddingX: "15px",
-              alignItems: "center",
-
-              borderBottom: "3px solid",
-              borderColor: "#aaa",
-            }}
-          >
-            <Grid item xs={2}>
-              <img
-                style={{
-                  borderRadius: "5px",
-                  width: "100%",
-                }}
-                src={item.image}
-                alt="product-image"
-              />
-            </Grid>
-            <Grid sx={{ textAlign: "center" }} item xs={3}>
-              <Link to={`/product/${item._id}`} component={routerr}>
-                {item.name}
-              </Link>
-            </Grid>
-            <Grid sx={{ textAlign: "center" }} item xs={3}>
-              <Typography sx={{ color: "#222831", fontWeight: "bold" }}>
-                $ {item.price}
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <FormControl size="small">
-                <Select
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
-                  value={item.qty}
-                  onChange={(e) =>
-                    dispatch(
-                      addtToCart({ ...item, qty: Number(e.target.value) })
-                    )
-                  }
-                  label="quantity"
-                >
-                  {[...Array(item.countInStock).keys()].map((items) => (
-                    <MenuItem key={items} value={items + 1}>
-                      {items + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={1}>
-              <Tooltip title="Delete">
-                <IconButton
-                  onClick={() => dispatch(deletecart(item))}
-                  sx={{
-                    backgroundColor: "#ddd",
-                    "&:hover": { backgroundColor: "#bbb" },
-                    borderRadius: "3px",
-                  }}
-                >
-                  <DeleteIcon></DeleteIcon>
-                </IconButton>
-              </Tooltip>
-            </Grid>
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const AllProducts = useMemo(() => {
+    if (cartItems.length === 0) {
+      return (
+        <Typography
+          sx={{
+            textTransform: "capitalize",
+            paddingY: "20px",
+            color: "#222831",
+            fontSize: "30px",
+            fontWeight: "bold",
+          }}
+        >
+          cartitems is empty
+        </Typography>
+      );
+    } else {
+      return cartItems.map((item) => (
+        <Grid
+          key={item.name}
+          spacing={2}
+          container
+          sx={{
+            paddingBottom: "15px",
+            paddingX: "15px",
+            alignItems: "center",
+            borderBottom: "3px solid",
+            borderColor: "#aaa",
+          }}
+        >
+          <Grid item xs={2}>
+            <img
+              style={{
+                borderRadius: "5px",
+                width: "100%",
+              }}
+              src={item.image}
+              alt="product-image"
+            />
           </Grid>
-        );
-      })
-    )
-  );
+          <Grid sx={{ textAlign: "center" }} item xs={3}>
+            <Link to={`/product/${item._id}`} component={routerr}>
+              {item.name}
+            </Link>
+          </Grid>
+          <Grid sx={{ textAlign: "center" }} item xs={3}>
+            <Typography sx={{ color: "#222831", fontWeight: "bold" }}>
+              $ {item.price}
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <FormControl size="small">
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                value={item.qty}
+                onChange={(e) =>
+                  dispatch(addtToCart({ ...item, qty: Number(e.target.value) }))
+                }
+                label="quantity"
+              >
+                {[...Array(item.countInStock).keys()].map((items) => (
+                  <MenuItem key={items} value={items + 1}>
+                    {items + 1}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={1}>
+            <Tooltip title="Delete">
+              <IconButton
+                onClick={() => dispatch(deletecart(item))}
+                sx={{
+                  backgroundColor: "#ddd",
+                  "&:hover": { backgroundColor: "#bbb" },
+                  borderRadius: "3px",
+                }}
+              >
+                <DeleteIcon></DeleteIcon>
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
+      ));
+    }
+  }, [cartItems]);
 
   ///main return
   return (
@@ -182,6 +179,8 @@ function Cart() {
 
             <Box sx={{ paddingY: "15px", paddingX: "5px" }}>
               <Button
+                component={routerr}
+                to="/shipping"
                 sx={{
                   background: "#222831",
                   textTransform: "capitalize",
