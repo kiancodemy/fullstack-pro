@@ -8,7 +8,8 @@ import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 import Login from "./screens/Login";
-
+import Register from "./screens/Register";
+import Shippingscreen from "./screens/Shippingscreen";
 export default function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,8 @@ export default function App() {
         <Route path="/product/:id" element={<Productscreen />}></Route>
         <Route path="/card" element={<Cart />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
+        <Route path="/shipping" element={<Shippingscreen />}></Route>
       </Routes>
       <ToastContainer
         transition={Zoom}

@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -20,30 +20,32 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useLogoutMutation } from "../slices/userApiSlice";
-import logout from "../slices/authslice";
+import { logout } from "../slices/authslice";
 import { Link as routerr } from "react-router-dom";
 import { useState } from "react";
 
 function Header() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   let [anchorElUser, setAnchorElUser] = useState(null);
   const counter = useSelector((state) => state.cart);
   const { userinfo } = useSelector((state) => state.auth);
   const count = counter.cartItems.reduce((acc, a) => acc + a.qty, 0);
   const [out] = useLogoutMutation();
-  let open = Boolean(anchorElUser);
+  const [open, setopen] = useState(false);
   const handler = (event) => {
     setAnchorElUser(event.currentTarget);
+    setopen(true);
   };
 
   const handleclose = () => {
-    setAnchorElUser(null);
+    setopen(false);
   };
   const handleLogOut = async () => {
     try {
       await out().unwrap();
       dispatch(logout());
-      Navigate("/login");
+      navigate("/login");
     } catch (err) {
       console.log(err.message);
     }
@@ -77,7 +79,7 @@ function Header() {
             shop store
           </Typography>
           <Stack
-            spacing={3}
+            spacing={2}
             direction="row"
             sx={{
               display: { xs: "none", md: "block" },
@@ -89,6 +91,7 @@ function Header() {
                 to="/card"
                 sx={{
                   color: "#EEEEEE",
+                  textTransform: "capitalize",
                   "&:hover": { color: "#eeee" },
                   fontSize: "14px",
                 }}
@@ -103,6 +106,7 @@ function Header() {
                 to="/login"
                 component={routerr}
                 sx={{
+                  textTransform: "capitalize",
                   color: "#EEEEEE",
                   "&:hover": { color: "#eeee" },
                   fontSize: "14px",
@@ -117,6 +121,7 @@ function Header() {
                   to="/profile"
                   component={routerr}
                   sx={{
+                    textTransform: "capitalize",
                     color: "#EEEEEE",
                     "&:hover": { color: "#eeee" },
                     fontSize: "14px",
@@ -131,12 +136,21 @@ function Header() {
                     color: "#EEEEEE",
                     "&:hover": { color: "#eeee" },
                     fontSize: "14px",
+                    textTransform: "capitalize",
                   }}
                   startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
                 >
                   Logout
                 </Button>
-                <Typography>{userinfo.name}</Typography>
+                <span
+                  style={{
+                    color: "#EEEEEE",
+
+                    textDecoration: "none",
+                  }}
+                >
+                  {userinfo.name}
+                </span>
               </>
             )}
           </Stack>
@@ -149,46 +163,50 @@ function Header() {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Menu
-        sx={{ display: { xs: "block", md: "none" } }}
-        anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        onClose={handleclose}
-        open={open}
-      >
-        <MenuItem onClick={handleclose}>
-          <Button
-            component={routerr}
-            to="/cart"
-            sx={{
-              color: "#222831",
-
-              fontSize: "12px",
-            }}
-            startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
-          >
-            cart
-          </Button>
-        </MenuItem>
-        {userinfo ? (
+      {anchorElUser && (
+        <Menu
+          sx={{ display: { xs: "block", md: "none" } }}
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          onClose={handleclose}
+          open={open}
+        >
           <MenuItem onClick={handleclose}>
             <Button
               component={routerr}
+              to="/cart"
               sx={{
                 color: "#222831",
 
                 fontSize: "12px",
+                textTransform: "capitalize",
               }}
-              startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+              startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
             >
-              signin
+              cart
             </Button>
           </MenuItem>
-        ) : (
-          <>
+          {!userinfo && (
+            <MenuItem onClick={handleclose}>
+              <Button
+                to="/login"
+                component={routerr}
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#222831",
+
+                  fontSize: "12px",
+                }}
+                startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+              >
+                signin
+              </Button>
+            </MenuItem>
+          )}
+          {userinfo && (
             <MenuItem onClick={handleclose}>
               <Button
                 component={routerr}
@@ -202,9 +220,11 @@ function Header() {
                 Profile
               </Button>
             </MenuItem>
+          )}
+          {userinfo && (
             <MenuItem onClick={handleclose}>
               <Button
-                component={routerr}
+                onClick={handleLogOut}
                 sx={{
                   color: "#222831",
 
@@ -215,9 +235,9 @@ function Header() {
                 Logout
               </Button>
             </MenuItem>
-          </>
-        )}
-      </Menu>
+          )}
+        </Menu>
+      )}
     </Container>
   );
 }

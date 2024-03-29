@@ -173,7 +173,9 @@ function Productscreen() {
                         label="quantity"
                       >
                         {[...Array(finder.countInStock).keys()].map((item) => (
-                          <MenuItem value={item + 1}>{item + 1}</MenuItem>
+                          <MenuItem key={item + 2} value={item + 1}>
+                            {item + 1}
+                          </MenuItem>
                         ))}
                       </Select>
                     </FormControl>

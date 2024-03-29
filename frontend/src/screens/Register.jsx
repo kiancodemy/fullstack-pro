@@ -13,17 +13,17 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useLoginMutation } from "../slices/userApiSlice";
+import { useRegisterMutation } from "../slices/userApiSlice";
 import { setCredential } from "../slices/authslice";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-function Login() {
+function Register() {
   const { userinfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const redirect = params.get("redirect") || "/";
-  const [log, { isLoading }] = useLoginMutation();
+  const [registerr, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
   useEffect(() => {
     if (userinfo) {
@@ -40,16 +40,23 @@ function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    if (isValid) {
-      try {
-        const res = await log(data).unwrap();
+    if (data.confirmpassword !== data.password) {
+      toast.error("passwords dont match", {
+        position: "top-right",
+      });
+      return;
+    } else {
+      if (isValid) {
+        try {
+          const res = await registerr(data).unwrap();
 
-        dispatch(setCredential({ ...res }));
-        navigate(redirect);
-      } catch (err) {
-        toast.error(err?.data?.message, {
-          position: "bottom-left",
-        });
+          dispatch(setCredential({ ...res }));
+          navigate(redirect);
+        } catch (err) {
+          toast.error(err?.data?.message, {
+            position: "bottom-left",
+          });
+        }
       }
     }
   };
@@ -58,7 +65,7 @@ function Login() {
     <Container
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ marginTop: { xs: "20px", md: "30px" } }}
+      sx={{ marginTop: { xs: "20px", md: "10px" }, marginBottom: "10px" }}
       autoComplete="off"
     >
       <Button
@@ -66,7 +73,7 @@ function Login() {
         sx={{
           background: "#124076",
           textTransform: "capitalize",
-          marginBottom: "20px",
+          marginBottom: "10px",
 
           color: "white",
 
@@ -87,7 +94,7 @@ function Login() {
 
           display: "flex",
           flexDirection: "column",
-          gap: "15px",
+          gap: "8px",
         }}
       >
         <Typography
@@ -98,7 +105,27 @@ function Login() {
             color: "#00224D",
           }}
         >
-          Log in
+          sign up
+        </Typography>
+        <TextField
+          InputLabelProps={{ style: { color: "#496989" } }}
+          sx={{
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+              {
+                borderColor: "#496989",
+              },
+          }}
+          {...register("name", {
+            required: { value: true, message: "Name is required" },
+          })}
+          id="outlined"
+          label="Name"
+          type="text"
+          variant="outlined"
+          autoComplete="current-password"
+        />
+        <Typography sx={{ color: "#E72929" }}>
+          {errors.name?.message}
         </Typography>
         <TextField
           InputLabelProps={{ style: { color: "#496989" } }}
@@ -115,7 +142,7 @@ function Login() {
             },
             required: { value: true, message: "Email is required" },
           })}
-          id="outlined"
+          id="outline"
           label="email"
           type="text"
           variant="outlined"
@@ -167,6 +194,49 @@ function Login() {
         >
           {errors.password?.message}
         </Typography>
+        <TextField
+          InputLabelProps={{ style: { color: "#496989" } }}
+          sx={{
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+              {
+                borderColor: "#496989",
+              },
+          }}
+          {...register("confirmpassword", {
+            required: { value: true, message: "confirmpassword is required" },
+            minLength: {
+              value: 5,
+              message: "confirmpasswordshould have minimim 5 characters",
+            },
+            maxLength: {
+              value: 20,
+              message: "Confirm password should have maximum 20 characters",
+            },
+          })}
+          id="outlined-password-inputt"
+          label="Confirm Password"
+          variant="outlined"
+          type="password"
+          autoComplete="current-password"
+          helperText={
+            <span
+              style={{
+                fontSize: "12px",
+
+                color: "#aaa",
+              }}
+            >
+              Confirm password should be between 5 to 20 character
+            </span>
+          }
+        />
+        <Typography
+          sx={{
+            color: "#E72929",
+          }}
+        >
+          {errors.confirmpassword?.message}
+        </Typography>
         {isLoading ? (
           <LoadingButton
             sx={{
@@ -200,7 +270,7 @@ function Login() {
           </Button>
         )}
         <Box sx={{ display: "flex", gap: "5px", alignItems: "center" }}>
-          <Typography>New user?</Typography>
+          <Typography>Already have account ?</Typography>
           <Button
             sx={{
               textTransform: "capitalize",
@@ -209,10 +279,10 @@ function Login() {
                 backgroundColor: "#ddd",
               },
             }}
-            to={redirect ? `/register?redirect=${redirect}` : "/register"}
+            to={redirect ? `/login?redirect=${redirect}` : "/login"}
             component={Link}
           >
-            register
+            LogIn
           </Button>
         </Box>
       </Paper>
@@ -220,4 +290,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
