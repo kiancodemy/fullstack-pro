@@ -30,7 +30,7 @@ function Productscreen() {
   const dispatch = useDispatch();
   const { id: productid } = useParams();
   const { data: finder, error, isLoading } = useGetproductsbyidQuery(productid);
-  const navigate = useNavigate();
+
   const [Quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {

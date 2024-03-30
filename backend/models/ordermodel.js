@@ -18,10 +18,10 @@ const orderSchema = new mongoose.Schema(
     shippingAddress: {
       address: { type: String, require: true },
       city: { type: String, require: true },
-      postalCode: { type: String, require: true },
+      postalcode: { type: String, require: true },
       country: { type: String, require: true },
     },
-    paymentMethod: { type: String, require: true },
+    paymentmethod: { type: String, require: true },
     paymentResult: {
       id: { type: String },
       status: { type: String },
@@ -29,7 +29,8 @@ const orderSchema = new mongoose.Schema(
       email_address: { type: String },
     },
     shippingPrice: { type: Number, require: true, default: 0.0 },
-    totalgPrice: { type: Number, require: true, default: 0.0 },
+    totalPrice: { type: Number, require: true, default: 0.0 },
+    itemPrice: { type: Number, require: true, default: 0.0 },
     isPaid: { type: Boolean, require: true, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, require: true, default: false },

@@ -12,7 +12,7 @@ import Register from "./screens/Register";
 import Shippingscreen from "./screens/Shippingscreen";
 import Private from "./components/Private";
 import Paymentscreen from "./screens/Paymentscreen";
-
+import Placeorder from "./screens/Placeorder";
 export default function App() {
   return (
     <BrowserRouter>
@@ -25,6 +25,7 @@ export default function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/payment" element={<Paymentscreen />}></Route>
+        <Route path="/placeorder" element={<Placeorder />}></Route>
 
         <Route path="" element={<Private />}>
           <Route path="/shipping" element={<Shippingscreen />}></Route>
@@ -36,7 +37,6 @@ export default function App() {
         theme="light"
         autoClose={2000}
       />
-      <Footer></Footer>
     </BrowserRouter>
   );
 }

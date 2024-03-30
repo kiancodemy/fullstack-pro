@@ -10,15 +10,22 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { savepayment } from "../slices/cardslice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import CheckoutNavbar from "../components/Checkout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function Paymentscreen() {
   const navigate = useNavigate();
   const dipatch = useDispatch();
   const [value, setvalue] = useState("");
+  const cart = useSelector((state) => state.cart);
+  useEffect(() => {
+    if (Object.keys(cart.shippingAddress).length === 0) {
+      navigate("/shipping");
+    }
+  }, [cart.shippingAddress]);
+
   const handle = (e) => {
     setvalue(e.target.value);
   };
