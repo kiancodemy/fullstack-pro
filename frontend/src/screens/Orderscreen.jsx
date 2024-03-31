@@ -1,0 +1,327 @@
+import { useParams } from "react-router-dom";
+import { useGetOrderDetailQuery } from "../slices/userApiSlice";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Alert,
+  Paper,
+  Container,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Rating,
+  Link,
+  Card,
+  CardMedia,
+} from "@mui/material";
+import Loading from "../components/loading";
+import Error from "../components/Error";
+function Orderscreen() {
+  const { id: orderId } = useParams();
+  const { data: order, error, isLoading } = useGetOrderDetailQuery(orderId);
+
+  return isLoading ? (
+    <Loading />
+  ) : error ? (
+    <Error message={error} />
+  ) : (
+    <Container sx={{ paddingY: "20px" }}>
+      <Typography
+        sx={{
+          fontSize: { lg: "30px", xs: "20px" },
+          fontWeight: "bold",
+          textTransform: "capitalize",
+          color: "#00224D",
+        }}
+      >
+        order {order._id}
+      </Typography>
+      <Grid columnGap={4} container>
+        <Grid item xs={12} md={7}>
+          <List sx={{ paddingY: "20px" }}>
+            <ListItem>
+              <ListItemText>
+                <Typography
+                  sx={{
+                    fontSize: { lg: "30px", xs: "20px" },
+                    fontWeight: "bold",
+                    textTransform: "capitalize",
+                    color: "#00224D",
+                  }}
+                >
+                  shipping
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography sx={{ color: "#00224D" }}>
+                    <span style={{ fontWeight: "bold" }}>Name</span>:
+                    <span> </span>
+                    <span>{order.user.name}</span>
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography sx={{ color: "#00224D" }}>
+                    <span style={{ fontWeight: "bold" }}>Email</span>:
+                    <span> </span>
+                    <span>{order.user.email}</span>
+                  </Typography>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography sx={{ color: "#00224D" }}>
+                    <span style={{ fontWeight: "bold" }}>Adress</span>:
+                    <span> </span>
+                    <span>{order.shippingAddress.address}</span>,
+                    <span>{order.shippingAddress.city}</span>,
+                    <span>{order.shippingAddress.country}</span>,
+                  </Typography>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                <Alert
+                  icon={false}
+                  color="warning"
+                  sx={{ backgroundColor: "#f5a9a9" }}
+                >
+                  {order.isDelivered ? (
+                    <span style={{ fontWeight: "bold" }}>Deliver</span>
+                  ) : (
+                    <span style={{ fontWeight: "bold" }}>Not Deliver</span>
+                  )}
+                </Alert>
+              </ListItemText>
+            </ListItem>
+          </List>
+          <Divider sx={{ border: "1px solid #aaa" }}></Divider>
+          {/*second */}
+          <List>
+            <ListItem>
+              <ListItemText>
+                <Typography
+                  sx={{
+                    fontSize: { lg: "30px", xs: "20px" },
+                    fontWeight: "bold",
+                    textTransform: "capitalize",
+                    color: "#00224D",
+                  }}
+                >
+                  payment Method
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={
+                  <Typography sx={{ color: "#00224D" }}>
+                    <span style={{ fontWeight: "bold" }}>Method</span>:
+                    <span> </span>
+                    <span>{order.paymentmethod}</span>
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem>
+              <ListItemText>
+                <Alert
+                  icon={false}
+                  color="warning"
+                  sx={{ backgroundColor: "#f5a9a9" }}
+                >
+                  {order.isPaid ? (
+                    <span style={{ fontWeight: "bold" }}>Paid</span>
+                  ) : (
+                    <span style={{ fontWeight: "bold" }}>Not Paid</span>
+                  )}
+                </Alert>
+              </ListItemText>
+            </ListItem>
+          </List>
+        </Grid>
+        {/*right*/}
+        <Grid item xs={9} md={4}>
+          <Paper sx={{ padding: "10px" }}>
+            <Typography
+              sx={{
+                color: "#aaa",
+                fontWeight: "bold",
+                fontSize: { xs: "20px", md: "30px" },
+                textTransform: "capitalize",
+              }}
+            >
+              order summary
+            </Typography>
+            <Grid
+              sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
+              container
+            >
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                items
+              </Grid>
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                ${order.itemPrice}
+              </Grid>
+            </Grid>
+            <Grid
+              sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
+              container
+            >
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                shipping
+              </Grid>
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                ${order.shippingPrice}
+              </Grid>
+            </Grid>
+            <Grid
+              sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
+              container
+            >
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                tax
+              </Grid>
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                ${order.taxPrice}
+              </Grid>
+            </Grid>
+            <Grid
+              sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
+              container
+            >
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                total
+              </Grid>
+              <Grid
+                item
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#3D3B40",
+                  fontSize: "18px",
+                  fontweight: "bold",
+                }}
+                xs={6}
+              >
+                ${order.totalPrice}
+              </Grid>
+            </Grid>
+
+            {isLoading ? (
+              <LoadingButton
+                sx={{
+                  alignSelf: "start",
+                  backgroundColor: "#124076",
+
+                  "& .MuiCircularProgress-root": {
+                    color: "white",
+                  },
+                }}
+                loading
+                variant="outlined"
+              >
+                <span>Lading</span>
+              </LoadingButton>
+            ) : (
+              <Button
+                sx={{
+                  backgroundColor: "#124076",
+                  marginTop: "10px",
+                  textTransform: "capitalize",
+
+                  "&:hover": {
+                    backgroundColor: "#00224D",
+                  },
+                }}
+                variant="contained"
+                type="submit"
+              >
+                continue
+              </Button>
+            )}
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+}
+
+export default Orderscreen;

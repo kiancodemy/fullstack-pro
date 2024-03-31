@@ -31,6 +31,7 @@ const orderSchema = new mongoose.Schema(
     shippingPrice: { type: Number, require: true, default: 0.0 },
     totalPrice: { type: Number, require: true, default: 0.0 },
     itemPrice: { type: Number, require: true, default: 0.0 },
+    taxPrice: { type: Number, require: true, default: 0.0 },
     isPaid: { type: Boolean, require: true, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, require: true, default: false },

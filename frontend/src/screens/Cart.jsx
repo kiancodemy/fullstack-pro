@@ -36,6 +36,7 @@ function Cart() {
       });
     } else {
       navigate("/shipping");
+      // navigate(`/order/${res._id}`);
     }
   };
   const AllProducts = useMemo(() => {

@@ -61,7 +61,7 @@ function Placeorder() {
         position: "bottom-right",
       });
       setTimeout(() => {
-        navigate("/");
+        navigate(`/orders/${res._id}`);
       }, 2500);
     } catch (err) {
       toast.error(err?.data?.message, {

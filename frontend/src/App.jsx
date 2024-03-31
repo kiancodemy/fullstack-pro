@@ -13,6 +13,7 @@ import Shippingscreen from "./screens/Shippingscreen";
 import Private from "./components/Private";
 import Paymentscreen from "./screens/Paymentscreen";
 import Placeorder from "./screens/Placeorder";
+import Orderscreen from "./screens/Orderscreen";
 export default function App() {
   return (
     <BrowserRouter>
@@ -24,11 +25,14 @@ export default function App() {
         <Route path="/card" element={<Cart />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
-        <Route path="/payment" element={<Paymentscreen />}></Route>
-        <Route path="/placeorder" element={<Placeorder />}></Route>
+
+        <Route path="/orders/:id" element={<Orderscreen />}></Route>
 
         <Route path="" element={<Private />}>
           <Route path="/shipping" element={<Shippingscreen />}></Route>
+          <Route path="/payment" element={<Paymentscreen />}></Route>
+
+          <Route path="/placeorder" element={<Placeorder />}></Route>
         </Route>
       </Routes>
       <ToastContainer
