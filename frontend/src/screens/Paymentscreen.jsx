@@ -35,7 +35,7 @@ function Paymentscreen() {
       dipatch(savepayment(value));
       navigate("/placeorder");
     } else {
-      toast.error("slect a method", {
+      toast.error("select a payment method", {
         position: "top-right",
       });
     }

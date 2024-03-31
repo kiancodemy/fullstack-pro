@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { saveShippingAdress } from "../slices/cardslice";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutNavbar from "../components/Checkout";
-
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 function Shippingscreen() {
   const {
@@ -25,9 +25,16 @@ function Shippingscreen() {
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
+
   const navigate = useNavigate();
   const dipatch = useDispatch();
   const { shippingAddress } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate("/card");
+    }
+  }, [cartItems]);
   const onSubmit = async (data) => {
     if (isValid) {
       try {

@@ -17,16 +17,27 @@ import {
 } from "@mui/material";
 import { deletecart, addtToCart } from "../slices/cardslice";
 import { Link as routerr } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { toast } from "react-toastify";
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const totalprice = useSelector((state) => state.cart.totalPrice);
   const total = useSelector((state) =>
     state.cart.cartItems.reduce((acc, item) => acc + item.qty, 0)
   );
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const handler = () => {
+    if (cartItems.length === 0) {
+      toast.error("Cart Item Is Empty", {
+        position: "bottom-right",
+      });
+    } else {
+      navigate("/shipping");
+    }
+  };
   const AllProducts = useMemo(() => {
     if (cartItems.length === 0) {
       return (
@@ -169,7 +180,11 @@ function Cart() {
               >
                 subtotal {total} items
               </Typography>
-              <Typography sx={{ fontWeight: "bold" }}>${totalprice}</Typography>
+              {cartItems.length > 0 && (
+                <Typography sx={{ fontWeight: "bold" }}>
+                  ${totalprice}
+                </Typography>
+              )}
             </Stack>
 
             <Divider
@@ -179,8 +194,7 @@ function Cart() {
 
             <Box sx={{ paddingY: "15px", paddingX: "5px" }}>
               <Button
-                component={routerr}
-                to="/shipping"
+                onClick={handler}
                 sx={{
                   background: "#222831",
                   textTransform: "capitalize",
@@ -188,6 +202,7 @@ function Cart() {
                   color: "white",
 
                   "&:hover": {
+                    color: "white",
                     background: "#1B1A58",
                   },
                 }}

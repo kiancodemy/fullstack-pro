@@ -10,22 +10,31 @@ import {
   Divider,
   Stack,
 } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useAddOrderMutation } from "../slices/orderApislice";
+import { clearcard } from "../slices/cardslice";
 import { useEffect } from "react";
+
 import { Link as routerr } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutNavbar from "../components/Checkout";
 
 function Placeorder() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  // api for make order
+  const [send, { isLoading }] = useAddOrderMutation();
+  //selectors
   const { address, city, postalcode, country } = useSelector(
     (state) => state.cart.shippingAddress
   );
+
   const payment = useSelector((state) => state.cart.paymentmethod);
   const cart = useSelector((state) => state.cart);
+  //useeffect
   useEffect(() => {
     if (Object.keys(cart.shippingAddress).length === 0) {
       navigate("/shipping");
@@ -33,9 +42,37 @@ function Placeorder() {
       navigate("/payment");
     }
   }, [cart.shippingAddress, cart.paymentmethod]);
-  const all = cart.cartItems.map((item) => (
+
+  // place order main function
+
+  const orderHandler = async () => {
+    try {
+      const res = await send({
+        cartItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentmethod: cart.paymentmethod,
+        itemPrice: cart.itemPrice,
+        totalPrice: cart.totalPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+      }).unwrap();
+      dispatch(clearcard());
+      toast.success("send successfully", {
+        position: "bottom-right",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 2500);
+    } catch (err) {
+      toast.error(err?.data?.message, {
+        position: "bottom-right",
+      });
+    }
+  };
+  //the items we choosed
+  const all = cart.cartItems.map((items) => (
     <Grid
-      key={item.name}
+      key={items.name}
       spacing={2}
       container
       sx={{
@@ -52,27 +89,27 @@ function Placeorder() {
             borderRadius: "5px",
             width: "100%",
           }}
-          src={item.image}
+          src={items.image}
           alt="product-image"
         />
       </Grid>
-      <Grid sx={{ textAlign: "center" }} item xs={4}>
-        <Link to={`/product/${item._id}`} component={routerr}>
-          {item.name}
+      <Grid item sx={{ textAlign: "center" }} xs={4}>
+        <Link to={`/product/${items._id}`} component={routerr}>
+          {items.name}
         </Link>
       </Grid>
-      <Grid sx={{ textAlign: "center" }} item xs={4}>
+      <Grid item xs={5}>
         <Typography sx={{ color: "#222831", fontWeight: "bold" }}>
-          {item.qty}* ${item.price} = ${Number(item.price) * item.qty}
+          {items.qty}* ${items.price} = ${Number(items.price) * items.qty}
         </Typography>
       </Grid>
     </Grid>
   ));
 
-  //
+  // main return
   return (
     <Container>
-      <Box sx={{ maxWidth: "500px", margin: "auto", marginTop: "10px" }}>
+      <Box sx={{ maxWidth: "500px", margin: "auto", marginY: "20px" }}>
         <CheckoutNavbar step={3}></CheckoutNavbar>
       </Box>
       <Grid sx={{ marginTop: "10px" }} columnGap={2} container>
@@ -102,7 +139,7 @@ function Placeorder() {
               sx={{
                 textTransform: "capitalize",
                 color: "#00224D",
-                fontSize: { xs: "12px", md: "18px" },
+                fontSize: { xs: "14px", md: "18px" },
               }}
             >
               <span style={{ fontWeight: "bold", textTransform: "capitalize" }}>
@@ -178,9 +215,9 @@ function Placeorder() {
             <Grid
               sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
               container
-              xs={12}
             >
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
@@ -188,19 +225,18 @@ function Placeorder() {
                   fontweight: "bold",
                 }}
                 xs={6}
-                item
               >
                 items
               </Grid>
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
                   fontSize: "18px",
                   fontweight: "bold",
                 }}
-                item
-                xs={5}
+                xs={6}
               >
                 ${cart.itemPrice}
               </Grid>
@@ -208,9 +244,9 @@ function Placeorder() {
             <Grid
               sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
               container
-              xs={12}
             >
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
@@ -218,19 +254,18 @@ function Placeorder() {
                   fontweight: "bold",
                 }}
                 xs={6}
-                item
               >
                 shipping
               </Grid>
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
                   fontSize: "18px",
                   fontweight: "bold",
                 }}
-                item
-                xs={5}
+                xs={6}
               >
                 ${cart.shippingPrice}
               </Grid>
@@ -238,9 +273,9 @@ function Placeorder() {
             <Grid
               sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
               container
-              xs={12}
             >
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
@@ -248,19 +283,18 @@ function Placeorder() {
                   fontweight: "bold",
                 }}
                 xs={6}
-                item
               >
                 tax
               </Grid>
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
                   fontSize: "18px",
                   fontweight: "bold",
                 }}
-                item
-                xs={5}
+                xs={6}
               >
                 ${cart.taxPrice}
               </Grid>
@@ -268,9 +302,9 @@ function Placeorder() {
             <Grid
               sx={{ borderBottom: "1px solid #aaa", padding: "15px" }}
               container
-              xs={12}
             >
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
@@ -278,38 +312,56 @@ function Placeorder() {
                   fontweight: "bold",
                 }}
                 xs={6}
-                item
               >
                 total
               </Grid>
               <Grid
+                item
                 sx={{
                   textTransform: "capitalize",
                   color: "#3D3B40",
                   fontSize: "18px",
                   fontweight: "bold",
                 }}
-                item
-                xs={5}
+                xs={6}
               >
                 ${cart.totalPrice}
               </Grid>
             </Grid>
 
-            <Button
-              sx={{
-                alignSelf: "start",
-                backgroundColor: "#124076",
-                marginTop: "10px",
-                "&:hover": {
-                  backgroundColor: "#00224D",
-                },
-              }}
-              variant="contained"
-              type="submit"
-            >
-              continue
-            </Button>
+            {isLoading ? (
+              <LoadingButton
+                sx={{
+                  alignSelf: "start",
+                  backgroundColor: "#124076",
+
+                  "& .MuiCircularProgress-root": {
+                    color: "white",
+                  },
+                }}
+                loading
+                variant="outlined"
+              >
+                <span>Lading</span>
+              </LoadingButton>
+            ) : (
+              <Button
+                onClick={orderHandler}
+                sx={{
+                  backgroundColor: "#124076",
+                  marginTop: "10px",
+                  textTransform: "capitalize",
+
+                  "&:hover": {
+                    backgroundColor: "#00224D",
+                  },
+                }}
+                variant="contained"
+                type="submit"
+              >
+                continue
+              </Button>
+            )}
           </Paper>
         </Grid>
       </Grid>
