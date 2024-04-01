@@ -25,18 +25,7 @@ const userApiSlice = apislice.injectEndpoints({
         body: data,
       }),
     }),
-    getOrderDetail: build.query({
-      //
-      query: (id) => ({
-        url: `/orders/${id}`,
-      }),
-      keepUnusedDataFor: 5,
-    }),
   }),
 });
-export const {
-  useLoginMutation,
-  useLogoutMutation,
-  useRegisterMutation,
-  useGetOrderDetailQuery,
-} = userApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
+  userApiSlice;

@@ -1,5 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useGetOrderDetailQuery } from "../slices/userApiSlice";
+
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import {
+  usePayOrderMutation,
+  usePaypalIdQuery,
+  useGetOrderDetailQuery,
+} from "../slices/orderApislice";
+const style = { layout: "vertical" };
 import {
   Box,
   Button,
@@ -13,16 +20,52 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  Rating,
-  Link,
-  Card,
-  CardMedia,
 } from "@mui/material";
-import Loading from "../components/loading";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 import Error from "../components/Error";
+import { useSelector } from "react-redux";
+import Order from "../../../backend/models/ordermodel";
+import Loading from "../components/loading";
 function Orderscreen() {
+  //queries
   const { id: orderId } = useParams();
+  const [{ isPending }, dispatch] = usePayPalScriptReducer();
+  const { userinfo } = useSelector((state) => state.auth);
+
+  const [payorder, { isLoading: updating }] = usePayOrderMutation();
   const { data: order, error, isLoading } = useGetOrderDetailQuery(orderId);
+  const {
+    data,
+    isLoading: paypalloading,
+    error: paypalerror,
+  } = usePaypalIdQuery();
+  //handle pay buuton
+  function approvePay() {}
+  function createOrder() {}
+  function onApprove() {}
+  function onerror() {}
+  //useeffect
+  useEffect(() => {
+    if (!paypalerror && !paypalloading && data.clientId) {
+      const get = async () => {
+        dispatch({
+          type: "resetOptions",
+          value: {
+            clientId: data.clientId,
+            currency: "USD",
+            intent: "capture",
+          },
+        });
+      };
+      if (order && !order.isPaid) {
+        if (!window.paypal) {
+          get();
+        }
+      }
+    }
+  }, [paypalerror, paypalloading, data, order]);
 
   return isLoading ? (
     <Loading />
@@ -285,37 +328,36 @@ function Orderscreen() {
               </Grid>
             </Grid>
 
-            {isLoading ? (
-              <LoadingButton
-                sx={{
-                  alignSelf: "start",
-                  backgroundColor: "#124076",
-
-                  "& .MuiCircularProgress-root": {
-                    color: "white",
-                  },
-                }}
-                loading
-                variant="outlined"
-              >
-                <span>Lading</span>
-              </LoadingButton>
+            {isPending || updating ? (
+              <Loading></Loading>
             ) : (
-              <Button
-                sx={{
-                  backgroundColor: "#124076",
-                  marginTop: "10px",
-                  textTransform: "capitalize",
-
-                  "&:hover": {
-                    backgroundColor: "#00224D",
-                  },
-                }}
-                variant="contained"
-                type="submit"
+              <Box
+                sx={{ display: "flex", flexDirection: "column", gap: "5px" }}
               >
-                continue
-              </Button>
+                <Button
+                  onClick={approvePay}
+                  sx={{
+                    backgroundColor: "#124076",
+                    marginTop: "10px",
+                    textTransform: "capitalize",
+
+                    "&:hover": {
+                      backgroundColor: "#00224D",
+                    },
+                  }}
+                  variant="contained"
+                  type="submit"
+                >
+                  test payorder
+                </Button>
+
+                <PayPalButtons
+                  style={style}
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                  onError={onerror}
+                ></PayPalButtons>
+              </Box>
             )}
           </Paper>
         </Grid>

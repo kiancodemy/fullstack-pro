@@ -6,7 +6,7 @@ export const protect = async (req, res, next) => {
     let token;
     token = req.cookies.jwt;
     if (!token) {
-      throw new Error("there is  no token please login");
+      throw new Error("Please Log in");
     }
     const decoded = Jwt.verify(token, process.env.SECRETPASS);
     req.user = await User.findById(decoded.id).select("-password");

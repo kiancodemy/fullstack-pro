@@ -1,7 +1,9 @@
 import products from "../models/productmodel.js";
 const getall = async (req, res) => {
   try {
-    const all = await products.find();
+    let query = products.find();
+    query.maxTimeMS(15000);
+    const all = await query;
     if (!all) {
       throw new Error("noting has found at all");
     }

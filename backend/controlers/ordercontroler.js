@@ -68,10 +68,22 @@ const getOrderById = async (req, res) => {
 };
 const updateOrderToPaid = async (req, res) => {
   try {
-    res.send(" updateOrderToPaid ");
+    const find = await Order.findById(req.params.id);
+    if (find) {
+      find.isPaid = true;
+      find.paidAt = Date.now();
+      find.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.email_address,
+      };
+    }
+    const updated = await find.save();
+    res.status(201).json(updated);
   } catch (err) {
     res.status(404).json({
-      message: `${err}`,
+      message: `${err.message}`,
     });
   }
 };
