@@ -68,7 +68,7 @@ const getOrderById = async (req, res) => {
 };
 const updateOrderToPaid = async (req, res) => {
   try {
-    const find = await Order.findById(req.params.id);
+    let find = await Order.findById(req.params.id);
     if (find) {
       find.isPaid = true;
       find.paidAt = Date.now();

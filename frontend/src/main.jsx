@@ -5,12 +5,15 @@ import "./index.css";
 import store from "./Store";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <PayPalScriptProvider deferLoading={true}>
-        <App />
+        <BrowserRouter>
+          <App></App>
+        </BrowserRouter>
       </PayPalScriptProvider>
     </Provider>
   </React.StrictMode>

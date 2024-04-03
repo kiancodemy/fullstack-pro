@@ -12,7 +12,7 @@ const orderApiSlice = apislice.injectEndpoints({
     }),
     payOrder: build.mutation({
       //
-      query: ({ data, id }) => ({
+      query: ({ id, data }) => ({
         url: `/orders/${id}/pay`,
         method: "PUT",
         body: { ...data },

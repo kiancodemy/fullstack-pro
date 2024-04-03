@@ -26,7 +26,7 @@ import { toast } from "react-toastify";
 
 import Error from "../components/Error";
 import { useSelector } from "react-redux";
-import Order from "../../../backend/models/ordermodel";
+
 import Loading from "../components/loading";
 function Orderscreen() {
   //queries
@@ -35,16 +35,61 @@ function Orderscreen() {
   const { userinfo } = useSelector((state) => state.auth);
 
   const [payorder, { isLoading: updating }] = usePayOrderMutation();
-  const { data: order, error, isLoading } = useGetOrderDetailQuery(orderId);
+  let {
+    data: order,
+    error,
+    isLoading,
+    refetch,
+  } = useGetOrderDetailQuery(orderId);
   const {
     data,
     isLoading: paypalloading,
     error: paypalerror,
   } = usePaypalIdQuery();
-  //handle pay buuton
-  function approvePay() {}
-  function createOrder() {}
-  function onApprove() {}
+  //handle paypal button//
+
+  async function approvetest() {
+    try {
+      const get = await payorder({ id: orderId, details: { pay: {} } });
+      refetch();
+
+      toast.success("Paid Successfully", {
+        position: "bottom-right",
+      });
+    } catch (err) {
+      toast.error(err.data.message, {
+        position: "bottom-right",
+      });
+    }
+  }
+
+  function createOrder(data, actions) {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: order.totalPrice,
+          },
+        },
+      ],
+    });
+  }
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (data) {
+      try {
+        const order = await payorder({ id: orderId, data });
+        refetch();
+        toast.success("Paid Successfully", {
+          position: "bottom-right",
+        });
+      } catch (err) {
+        refetch();
+        toast.success(err.data.message, {
+          position: "bottom-right",
+        });
+      }
+    });
+  }
   function onerror() {}
   //useeffect
   useEffect(() => {
@@ -186,10 +231,14 @@ function Orderscreen() {
                 <Alert
                   icon={false}
                   color="warning"
-                  sx={{ backgroundColor: "#f5a9a9" }}
+                  sx={{
+                    backgroundColor: `${order.isPaid ? "#A5DD9B" : "#f5a9a9"}`,
+                  }}
                 >
                   {order.isPaid ? (
-                    <span style={{ fontWeight: "bold" }}>Paid</span>
+                    <span style={{ fontWeight: "bold" }}>
+                      Paid at {order.paidAt}
+                    </span>
                   ) : (
                     <span style={{ fontWeight: "bold" }}>Not Paid</span>
                   )}
@@ -335,7 +384,7 @@ function Orderscreen() {
                 sx={{ display: "flex", flexDirection: "column", gap: "5px" }}
               >
                 <Button
-                  onClick={approvePay}
+                  onClick={approvetest}
                   sx={{
                     backgroundColor: "#124076",
                     marginTop: "10px",
@@ -351,12 +400,14 @@ function Orderscreen() {
                   test payorder
                 </Button>
 
-                <PayPalButtons
-                  style={style}
-                  createOrder={createOrder}
-                  onApprove={onApprove}
-                  onError={onerror}
-                ></PayPalButtons>
+                {!order.isPaid && (
+                  <PayPalButtons
+                    style={style}
+                    createOrder={createOrder}
+                    onApprove={onApprove}
+                    onError={onerror}
+                  ></PayPalButtons>
+                )}
               </Box>
             )}
           </Paper>
