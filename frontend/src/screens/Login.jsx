@@ -47,7 +47,7 @@ function Login() {
         dispatch(setCredential({ ...res }));
         navigate(redirect);
       } catch (err) {
-        toast.error(err?.data?.message, {
+        toast.error(err?.data.message, {
           position: "top-right",
         });
       }

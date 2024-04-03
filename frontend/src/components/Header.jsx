@@ -209,6 +209,7 @@ function Header() {
           {userinfo && (
             <MenuItem onClick={handleclose}>
               <Button
+                to="/profile"
                 component={routerr}
                 sx={{
                   color: "#222831",

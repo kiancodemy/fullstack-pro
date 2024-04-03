@@ -16,6 +16,7 @@ import Paymentscreen from "./screens/Paymentscreen";
 import Placeorder from "./screens/Placeorder";
 import Orderscreen from "./screens/Orderscreen";
 import { Box } from "@mui/material";
+import Profile from "./screens/Profile";
 export default function App() {
   return (
     <Box
@@ -43,13 +44,14 @@ export default function App() {
           <Route path="/payment" element={<Paymentscreen />}></Route>
 
           <Route path="/placeorder" element={<Placeorder />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
         </Route>
       </Routes>
       <ToastContainer
         transition={Zoom}
         limit={3}
         theme="light"
-        autoClose={2000}
+        autoClose={3000}
       />
       <Footer></Footer>
     </Box>

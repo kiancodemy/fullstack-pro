@@ -25,7 +25,26 @@ const userApiSlice = apislice.injectEndpoints({
         body: data,
       }),
     }),
+    profile: build.mutation({
+      //
+      query: (data) => ({
+        url: `/users/profile`,
+        method: "put",
+        body: data,
+      }),
+    }),
+    myorders: build.query({
+      //
+      query: () => ({
+        url: `/orders/mine`,
+      }),
+    }),
   }),
 });
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
-  userApiSlice;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useRegisterMutation,
+  useProfileMutation,
+  useMyordersQuery,
+} = userApiSlice;

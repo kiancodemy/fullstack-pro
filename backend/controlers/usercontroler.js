@@ -23,9 +23,7 @@ const authUser = async (req, res) => {
   }
 };
 
-const getUsers = async (req, res) => {
-  res.send("getUsers");
-};
+const getUsers = async (req, res) => {};
 
 const getUserProfile = async (req, res) => {
   try {
@@ -114,9 +112,7 @@ const deleteUser = async (req, res) => {
 const updateUser = async (req, res) => {
   res.send("getUserById");
 };
-const getUserById = async (req, res) => {
-  res.send("getUserById");
-};
+const getUserById = async (req, res) => {};
 export {
   authUser,
   updateUserProfil,
