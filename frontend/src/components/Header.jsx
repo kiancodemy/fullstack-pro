@@ -28,16 +28,25 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let [anchorElUser, setAnchorElUser] = useState(null);
+  let [anchorElUsers, setAnchorElUsers] = useState(null);
   const counter = useSelector((state) => state.cart);
   const { userinfo } = useSelector((state) => state.auth);
   const count = counter.cartItems.reduce((acc, a) => acc + a.qty, 0);
   const [out] = useLogoutMutation();
   const [open, setopen] = useState(false);
+  const [opens, setopens] = useState(false);
+  const handle = (event) => {
+    setAnchorElUsers(event.currentTarget);
+    setopens(true);
+  };
   const handler = (event) => {
     setAnchorElUser(event.currentTarget);
     setopen(true);
   };
 
+  const handlecloses = () => {
+    setopens(false);
+  };
   const handleclose = () => {
     setopen(false);
   };
@@ -117,6 +126,19 @@ function Header() {
               </Button>
             ) : (
               <>
+                {userinfo && userinfo.admin && (
+                  <Button
+                    onClick={handle}
+                    sx={{
+                      textTransform: "capitalize",
+                      color: "#EEEEEE",
+                      "&:hover": { color: "#eeee" },
+                      fontSize: "14px",
+                    }}
+                  >
+                    Admin panel
+                  </Button>
+                )}
                 <Button
                   to="/profile"
                   component={routerr}
@@ -232,6 +254,79 @@ function Header() {
                   fontSize: "12px",
                 }}
                 startIcon={<PersonOutlineIcon></PersonOutlineIcon>}
+              >
+                Logout
+              </Button>
+            </MenuItem>
+          )}
+        </Menu>
+      )}
+      {/* second*/}
+      {anchorElUsers && (
+        <Menu
+          sx={{ display: { md: "block", xa: "none" } }}
+          anchorEl={anchorElUsers}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          onClose={handlecloses}
+          open={opens}
+        >
+          <MenuItem onClick={handlecloses}>
+            <Button
+              component={routerr}
+              to="/admin/product"
+              sx={{
+                color: "#222831",
+
+                fontSize: "12px",
+                textTransform: "capitalize",
+              }}
+            >
+              product
+            </Button>
+          </MenuItem>
+          {!userinfo && (
+            <MenuItem onClick={handlecloses}>
+              <Button
+                to="/admin/users"
+                component={routerr}
+                sx={{
+                  textTransform: "capitalize",
+                  color: "#222831",
+
+                  fontSize: "12px",
+                }}
+              >
+                users
+              </Button>
+            </MenuItem>
+          )}
+          {userinfo && (
+            <MenuItem onClick={handlecloses}>
+              <Button
+                to="/admin/orderlist"
+                component={routerr}
+                sx={{
+                  color: "#222831",
+
+                  fontSize: "12px",
+                }}
+              >
+                orders
+              </Button>
+            </MenuItem>
+          )}
+          {userinfo && (
+            <MenuItem onClick={handlecloses}>
+              <Button
+                onClick={handleLogOut}
+                sx={{
+                  color: "#222831",
+
+                  fontSize: "12px",
+                }}
               >
                 Logout
               </Button>

@@ -3,7 +3,8 @@ import Header from "./components/Header";
 import Homescreen from "./screens/Homescreen";
 import Productscreen from "./screens/Productscreen";
 import Footer from "./components/Footer";
-
+import Privateadmin from "./components/Privateadmin";
+import AllOrderList from "./screens/admin/AllOrderList";
 import Cart from "./screens/Cart";
 import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -45,6 +46,9 @@ export default function App() {
 
           <Route path="/placeorder" element={<Placeorder />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
+        </Route>
+        <Route path="" element={<Privateadmin />}>
+          <Route path="/admin/orderlist" element={<AllOrderList />}></Route>
         </Route>
       </Routes>
       <ToastContainer

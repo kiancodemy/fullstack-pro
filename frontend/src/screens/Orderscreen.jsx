@@ -5,6 +5,7 @@ import {
   usePayOrderMutation,
   usePaypalIdQuery,
   useGetOrderDetailQuery,
+  useSetToDeliveredMutation,
 } from "../slices/orderApislice";
 const style = { layout: "vertical" };
 import {
@@ -23,18 +24,23 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import Error from "../components/Error";
 import { useSelector } from "react-redux";
 
 import Loading from "../components/loading";
+
 function Orderscreen() {
   //queries
+
+  const navigate = useNavigate();
   const { id: orderId } = useParams();
   const [{ isPending }, dispatch] = usePayPalScriptReducer();
   const { userinfo } = useSelector((state) => state.auth);
 
   const [payorder, { isLoading: updating }] = usePayOrderMutation();
+  const [delivered] = useSetToDeliveredMutation();
   let {
     data: order,
     error,
@@ -47,6 +53,24 @@ function Orderscreen() {
     error: paypalerror,
   } = usePaypalIdQuery();
   //handle paypal button//
+  ///handle deliver by admin
+  const handledeliver = async () => {
+    try {
+      const send = await delivered(orderId);
+
+      toast.success("delivered Successfully", {
+        position: "bottom-right",
+      });
+      refetch();
+      setTimeout(() => {
+        navigate("/admin/orderlist");
+      }, 1500);
+    } catch (err) {
+      toast.error("did not delivered try agai", {
+        position: "bottom-right",
+      });
+    }
+  };
 
   async function approvetest() {
     try {
@@ -56,6 +80,9 @@ function Orderscreen() {
       toast.success("Paid Successfully", {
         position: "bottom-right",
       });
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1500);
     } catch (err) {
       toast.error(err.data.message, {
         position: "bottom-right",
@@ -186,10 +213,14 @@ function Orderscreen() {
                 <Alert
                   icon={false}
                   color="warning"
-                  sx={{ backgroundColor: "#f5a9a9" }}
+                  sx={{
+                    backgroundColor: `${
+                      order.isDelivered ? "#A5DD9B" : "#f5a9a9"
+                    }`,
+                  }}
                 >
                   {order.isDelivered ? (
-                    <span style={{ fontWeight: "bold" }}>Deliver</span>
+                    <span style={{ fontWeight: "bold" }}>Delivered</span>
                   ) : (
                     <span style={{ fontWeight: "bold" }}>Not Deliver</span>
                   )}
@@ -399,6 +430,23 @@ function Orderscreen() {
                 >
                   test payorder
                 </Button>
+                {userinfo.admin && (
+                  <Button
+                    onClick={handledeliver}
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#124076",
+                      marginTop: "10px",
+                      textTransform: "capitalize",
+
+                      "&:hover": {
+                        backgroundColor: "#00224D",
+                      },
+                    }}
+                  >
+                    Set it to delivered
+                  </Button>
+                )}
 
                 {!order.isPaid && (
                   <PayPalButtons

@@ -21,13 +21,13 @@ export const protect = async (req, res, next) => {
 export const admin = async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
-      next();
+      return next();
     }
 
     throw new Error("you are not admin");
   } catch (err) {
-    res.status(404).json({
-      message: `${err.message}`,
+    res.status(401).json({
+      message: err.message,
     });
   }
 };

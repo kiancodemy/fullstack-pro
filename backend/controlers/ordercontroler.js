@@ -89,19 +89,26 @@ const updateOrderToPaid = async (req, res) => {
 };
 const updateOrderToDelivered = async (req, res) => {
   try {
-    res.send(" updateOrderToDelivered");
+    let find = await Order.findById(req.params.id);
+    if (!find) {
+      throw new Error("the id is not right");
+    }
+    find.isDelivered = true;
+    const updated = await find.save();
+    res.status(201).json(updated);
   } catch (err) {
-    res.status(404).json({
-      message: `${err}`,
+    res.status(401).json({
+      message: err.message,
     });
   }
 };
 const getAllOrders = async (req, res) => {
   try {
-    res.send(" getAllOrders");
+    const all = await Order.find({}).populate("user", "id name");
+    res.status(201).json(all);
   } catch (err) {
     res.status(404).json({
-      message: `${err}`,
+      message: err.message,
     });
   }
 };
