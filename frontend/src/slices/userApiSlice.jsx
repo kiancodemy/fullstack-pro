@@ -29,7 +29,7 @@ const userApiSlice = apislice.injectEndpoints({
       //
       query: (data) => ({
         url: `/users/profile`,
-        method: "put",
+        method: "PUT",
         body: data,
       }),
     }),

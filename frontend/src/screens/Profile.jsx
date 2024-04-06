@@ -2,6 +2,10 @@ import { useProfileMutation } from "../slices/userApiSlice";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/loading";
+import ClearIcon from "@mui/icons-material/Clear";
+
+import { Link as routerr } from "react-router-dom";
+import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
@@ -11,6 +15,12 @@ import { useMyordersQuery } from "../slices/userApiSlice";
 import {
   Button,
   Grid,
+  Table,
+  TableHead,
+  TableBody,
+  TableContainer,
+  TableRow,
+  TableCell,
   Container,
   TextField,
   InputAdornment,
@@ -63,10 +73,13 @@ function Profile() {
       }
     }
   };
-  const { data: orders, isLoading, error } = useMyordersQuery();
-
+  const { data: orders, isLoading, error, refetch } = useMyordersQuery();
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <Container
+      maxWidth="xl"
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       sx={{ marginTop: { xs: "20px", md: "30px" } }}
@@ -90,12 +103,10 @@ function Profile() {
         Go back
       </Button>
       <Grid container>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           <Paper
             elevation={2}
             sx={{
-              maxWidth: "500px",
-
               padding: { xs: "15px", md: "25px" },
 
               display: "flex",
@@ -105,7 +116,8 @@ function Profile() {
           >
             <Typography
               sx={{
-                fontSize: { lg: "35px", xs: "20px" },
+                fontSize: { lg: "30px", xs: "20px" },
+                marginBottom: "10px",
                 fontWeight: "bold",
                 textTransform: "capitalize",
                 color: "#00224D",
@@ -240,11 +252,111 @@ function Profile() {
               variant="contained"
               type="submit"
             >
-              Sign in
+              update
             </Button>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={8}></Grid>
+        <Grid item xs={12} md={9}>
+          {isLoading ? (
+            <Loading></Loading>
+          ) : (
+            <Box
+              sx={{
+                padding: { xs: "15px", md: "20px" },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { lg: "30px", xs: "20px" },
+                  fontWeight: "bold",
+                  textTransform: "capitalize",
+                  marginBottom: "10px",
+                  color: "#00224D",
+                }}
+              >
+                my orders
+              </Typography>
+              {/*table*/}
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }} align="left">
+                        DATE
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }} align="left">
+                        TOTAL
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }} align="left">
+                        PAID
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }} align="center">
+                        DELIVERED
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: "bold" }}
+                        align="right"
+                      ></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {orders.map((row) => (
+                      <TableRow
+                        key={row._id}
+                        sx={{
+                          "&:last-child td, &:last-child th ": {
+                            border: 0,
+                          },
+                        }}
+                      >
+                        <TableCell
+                          sx={{ fontWeight: "bold" }}
+                          component="th"
+                          scope="row"
+                        >
+                          {row._id}
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }} align="left">
+                          {new Date(row.paidAt).toLocaleString()}
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }} align="left">
+                          ${row.totalPrice}
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }} align="left">
+                          {row.isPaid ? (
+                            new Date(row.paidAt).toLocaleString()
+                          ) : (
+                            <span>Not Paid</span>
+                          )}
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }} align="center">
+                          {row.isDelivered ? (
+                            <CheckIcon sx={{ color: "#367E18" }}></CheckIcon>
+                          ) : (
+                            <ClearIcon sx={{ color: "#E72929" }}></ClearIcon>
+                          )}
+                        </TableCell>
+                        <TableCell
+                          to={`/orders/${row._id}`}
+                          sx={{
+                            cursor: "pointer",
+                            textDecoration: "none",
+                            fontWeight: "bold",
+                          }}
+                          component={routerr}
+                          align="right"
+                        >
+                          Details
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          )}
+        </Grid>
       </Grid>
     </Container>
   );

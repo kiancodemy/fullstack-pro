@@ -51,7 +51,7 @@ function Header() {
     }
   };
   return (
-    <Container>
+    <Container maxWidth="xl">
       <AppBar
         sx={{
           position: "static",
