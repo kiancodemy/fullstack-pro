@@ -56,7 +56,7 @@ function AllOrderList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((row, index) => (
+              {orders?.map((row, index) => (
                 <TableRow
                   key={row._id}
                   sx={{

@@ -18,7 +18,7 @@ const authUser = async (req, res) => {
     }
   } catch (err) {
     res.status(404).json({
-      message: `${err.message}`,
+      message: err.message,
     });
   }
 };
@@ -40,7 +40,7 @@ const getUserProfile = async (req, res) => {
     });
   } catch (err) {
     res.status(404).json({
-      message: `${err.message}`,
+      message: err.message,
     });
   }
 };
@@ -76,7 +76,7 @@ const updateUserProfil = async (req, res) => {
     });
   } catch (err) {
     res.status(404).json({
-      message: `${err.message}`,
+      message: err.message,
     });
   }
 };
@@ -101,7 +101,7 @@ const registerUser = async (req, res) => {
     }
   } catch (err) {
     res.status(404).json({
-      message: `${err.message}`,
+      message: err.message,
     });
   }
 };

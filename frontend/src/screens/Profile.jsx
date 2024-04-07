@@ -301,7 +301,7 @@ function Profile() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {orders.map((row) => (
+                    {orders?.map((row) => (
                       <TableRow
                         key={row._id}
                         sx={{

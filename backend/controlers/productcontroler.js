@@ -10,7 +10,7 @@ const getall = async (req, res) => {
     res.json(all);
   } catch (err) {
     res.status(404).json({
-      message: `You faced Error it is ${err}`,
+      message: err.message,
     });
   }
 };
@@ -25,7 +25,7 @@ const getById = async (req, res) => {
     res.json(finder);
   } catch (err) {
     res.status(404).json({
-      message: `the error is ${err}`,
+      message: err.message,
     });
   }
 };
@@ -39,4 +39,26 @@ const deleter = async (req, res) => {
     });
   }
 };
-export { getById, getall, deleter };
+const AddProduct = async (req, res) => {
+  try {
+    const add = new products({
+      user: req.user._id,
+      name: "sample",
+      image: "/images/sample.jpg",
+      brand: "sample brand",
+      category: "sample",
+      description: "sample",
+
+      numReviews: 0,
+      price: 0,
+      countInStock: 0,
+    });
+    const product = await add.save();
+    res.status(201).json(product);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message,
+    });
+  }
+};
+export { getById, getall, deleter, AddProduct };

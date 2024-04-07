@@ -3,6 +3,7 @@ import Loading from "../../components/loading";
 import {
   useGetproductsQuery,
   useDeleteProductMutation,
+  useCreatItemMutation,
 } from "../../slices/productionapi";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -26,6 +27,7 @@ import {
 } from "@mui/material";
 function productlist() {
   const { data: orders, error, isLoading, refetch } = useGetproductsQuery();
+  const [create, { isLoading: iscreating }] = useCreatItemMutation();
   const [deleter, { isLoading: isdeleting }] = useDeleteProductMutation();
   const deleteProduct = async (id) => {
     console.log(id);
@@ -33,7 +35,18 @@ function productlist() {
     toast.success("Deleted Successfully", {
       position: "bottom-right",
     });
-    refetch();
+  };
+
+  const createproduct = async () => {
+    if (window.confirm("Are you sure you want to create product"))
+      try {
+        const data = await create().unwrap();
+        console.log(data);
+      } catch (err) {
+        toast.error(err?.data.message, {
+          position: "top-right",
+        });
+      }
   };
   return (
     <Container maxWidth="lg">
@@ -57,6 +70,7 @@ function productlist() {
           products
         </Typography>
         <Button
+          onClick={createproduct}
           sx={{
             backgroundColor: "#124076",
             textTransform: "capitalize",
@@ -152,7 +166,7 @@ function productlist() {
           </Table>
         </TableContainer>
       )}
-      {orders.length === 0 && (
+      {orders?.length === 0 && (
         <Typography
           sx={{
             marginTop: "10px",
