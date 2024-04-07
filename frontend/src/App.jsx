@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Homescreen from "./screens/Homescreen";
 import Productscreen from "./screens/Productscreen";
 import Footer from "./components/Footer";
+import ProductList from "./screens/admin/ProductList";
 import Privateadmin from "./components/Privateadmin";
 import AllOrderList from "./screens/admin/AllOrderList";
 import Cart from "./screens/Cart";
@@ -49,6 +50,7 @@ export default function App() {
         </Route>
         <Route path="" element={<Privateadmin />}>
           <Route path="/admin/orderlist" element={<AllOrderList />}></Route>
+          <Route path="/admin/product" element={<ProductList />}></Route>
         </Route>
       </Routes>
       <ToastContainer

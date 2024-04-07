@@ -29,4 +29,14 @@ const getById = async (req, res) => {
     });
   }
 };
-export { getById, getall };
+const deleter = async (req, res) => {
+  try {
+    const deleter = await products.findByIdAndDelete(req.params.id);
+    await res.status(201).json(deleter);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message,
+    });
+  }
+};
+export { getById, getall, deleter };

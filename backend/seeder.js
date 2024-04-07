@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import products from "./data/products.js";
 import users from "./data/user.js";
 import Product from "./models/productmodel.js";
@@ -17,14 +18,14 @@ const connect = async () => {
 const importdata = async () => {
   try {
     await Product.deleteMany();
-    await User.deleteMany();
+    /*await User.deleteMany();
     await Order.deleteMany();
     const allusers = await User.create(users);
     const id = allusers[0]._id;
     const allproducts = products.map((item) => {
       return { ...item, user: id };
-    });
-    await Product.insertMany(allproducts);
+    });*/
+    await Product.insertMany(products);
     console.log("inserted done");
     process.exit();
   } catch (err) {
@@ -49,6 +50,6 @@ connect();
 
 if (process.argv[2] === "-delete") {
   deletedata();
-} else if(process.argv[2] === "-import") {
+} else if (process.argv[2] === "-import") {
   importdata();
 }

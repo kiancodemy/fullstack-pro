@@ -284,7 +284,7 @@ function Header() {
                 textTransform: "capitalize",
               }}
             >
-              product
+              products
             </Button>
           </MenuItem>
           {!userinfo && (

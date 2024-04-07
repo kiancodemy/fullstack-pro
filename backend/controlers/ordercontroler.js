@@ -94,6 +94,7 @@ const updateOrderToDelivered = async (req, res) => {
       throw new Error("the id is not right");
     }
     find.isDelivered = true;
+    find.deliveredAt = Date.now();
     const updated = await find.save();
     res.status(201).json(updated);
   } catch (err) {

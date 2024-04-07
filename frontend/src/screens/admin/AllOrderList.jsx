@@ -56,10 +56,11 @@ function AllOrderList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((row) => (
+              {orders.map((row, index) => (
                 <TableRow
                   key={row._id}
                   sx={{
+                    backgroundColor: index % 2 === 0 ? "#EEEDED" : "",
                     "&:last-child td, &:last-child th ": {
                       border: 0,
                     },

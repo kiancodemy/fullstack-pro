@@ -430,23 +430,26 @@ function Orderscreen() {
                 >
                   test payorder
                 </Button>
-                {userinfo.admin && (
-                  <Button
-                    onClick={handledeliver}
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#124076",
-                      marginTop: "10px",
-                      textTransform: "capitalize",
+                {userinfo &&
+                  userinfo.admin &&
+                  order.isPaid &&
+                  !order.isDelivered && (
+                    <Button
+                      onClick={handledeliver}
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#124076",
+                        marginTop: "10px",
+                        textTransform: "capitalize",
 
-                      "&:hover": {
-                        backgroundColor: "#00224D",
-                      },
-                    }}
-                  >
-                    Set it to delivered
-                  </Button>
-                )}
+                        "&:hover": {
+                          backgroundColor: "#00224D",
+                        },
+                      }}
+                    >
+                      Set it to delivered
+                    </Button>
+                  )}
 
                 {!order.isPaid && (
                   <PayPalButtons
