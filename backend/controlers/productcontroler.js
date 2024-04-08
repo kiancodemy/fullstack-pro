@@ -61,4 +61,24 @@ const AddProduct = async (req, res) => {
     });
   }
 };
-export { getById, getall, deleter, AddProduct };
+const updatebyid = async (req, res) => {
+  try {
+    let find = await products.findById(req.params.id);
+    if (!find) {
+      throw new Error("could not find the product");
+    }
+    find.name = req.body.name;
+    find.price = req.body.price;
+    find.category = req.body.category;
+    find.description = req.body.description;
+    find.countInStock = req.body.countInStock;
+    find.brand = req.body.brand;
+    await find.save();
+    res.status(201).json(find);
+  } catch (err) {
+    res.status(401).json({
+      message: err.message,
+    });
+  }
+};
+export { getById, getall, deleter, AddProduct, updatebyid };

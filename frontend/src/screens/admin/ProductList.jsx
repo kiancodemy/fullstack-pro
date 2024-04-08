@@ -1,15 +1,16 @@
 import Loading from "../../components/loading";
+import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 
 import {
   useGetproductsQuery,
+  useUpdateProductByIdMutation,
   useDeleteProductMutation,
   useCreatItemMutation,
 } from "../../slices/productionapi";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { Link as routerr } from "react-router-dom";
 import { toast } from "react-toastify";
-
-import CheckIcon from "@mui/icons-material/Check";
 
 import {
   Button,
@@ -29,6 +30,7 @@ function productlist() {
   const { data: orders, error, isLoading, refetch } = useGetproductsQuery();
   const [create, { isLoading: iscreating }] = useCreatItemMutation();
   const [deleter, { isLoading: isdeleting }] = useDeleteProductMutation();
+ 
   const deleteProduct = async (id) => {
     console.log(id);
     await deleter(id);
@@ -143,6 +145,23 @@ function productlist() {
                     {row.brand}
                   </TableCell>
                   <TableCell align="right">
+                    <IconButton
+                      to={`/update/${row._id}`}
+                      component={routerr}
+                      aria-label="update"
+                    >
+                      <EditCalendarOutlinedIcon
+                        sx={{
+                          padding: "1px",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                          color: "#000",
+
+                          textDecoration: "none",
+                          fontWeight: "bold",
+                        }}
+                      ></EditCalendarOutlinedIcon>
+                    </IconButton>
                     <IconButton
                       onClick={() => deleteProduct(row._id)}
                       aria-label="delete"

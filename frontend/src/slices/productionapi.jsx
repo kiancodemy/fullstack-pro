@@ -27,6 +27,16 @@ const productionApiSlice = apislice.injectEndpoints({
     getproductsbyid: build.query({
       query: (id) => `/data/${id}`,
       keepUnusedDataFor: 5,
+      providesTags: ["Proid"],
+    }),
+    UpdateProductById: build.mutation({
+      //
+      query: ({ data, id }) => ({
+        url: `/data/${id}`,
+        method: "PUT",
+        body: { ...data },
+      }),
+      invalidatesTags: ["Post", "Proid"],
     }),
   }),
 });
@@ -35,4 +45,5 @@ export const {
   useGetproductsbyidQuery,
   useDeleteProductMutation,
   useCreatItemMutation,
+  useUpdateProductByIdMutation,
 } = productionApiSlice;
