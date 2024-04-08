@@ -33,18 +33,42 @@ const userApiSlice = apislice.injectEndpoints({
         body: data,
       }),
     }),
-    myorders: build.query({
+    Updateuser: build.mutation({
       //
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["All"],
+    }),
+    DeletedeUser: build.mutation({
+      //
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["All"],
+    }),
+    myorders: build.query({
       query: () => ({
         url: `/orders/mine`,
       }),
+    }),
+    GetAllUsers: build.query({
+      query: () => ({
+        url: "/users",
+      }),
+      providesTags: ["All"],
     }),
   }),
 });
 export const {
   useLoginMutation,
   useLogoutMutation,
+  useGetAllUsersQuery,
   useRegisterMutation,
   useProfileMutation,
   useMyordersQuery,
+  useUpdateuserMutation,
+  useDeletedeUserMutation,
 } = userApiSlice;

@@ -281,28 +281,12 @@ function Header() {
                 color: "#222831",
 
                 fontSize: "12px",
-                textTransform: "capitalize",
               }}
             >
               products
             </Button>
           </MenuItem>
-          {!userinfo && (
-            <MenuItem onClick={handlecloses}>
-              <Button
-                to="/admin/users"
-                component={routerr}
-                sx={{
-                  textTransform: "capitalize",
-                  color: "#222831",
-
-                  fontSize: "12px",
-                }}
-              >
-                users
-              </Button>
-            </MenuItem>
-          )}
+          {!userinfo && <MenuItem onClick={handlecloses}></MenuItem>}
           {userinfo && (
             <MenuItem onClick={handlecloses}>
               <Button
@@ -321,14 +305,15 @@ function Header() {
           {userinfo && (
             <MenuItem onClick={handlecloses}>
               <Button
-                onClick={handleLogOut}
+                to="/admin/user"
+                component={routerr}
                 sx={{
                   color: "#222831",
 
                   fontSize: "12px",
                 }}
               >
-                Logout
+                Users
               </Button>
             </MenuItem>
           )}

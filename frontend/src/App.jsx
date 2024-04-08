@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import Userlist from "./screens/admin/Userlist";
 import ProductUpdate from "./screens/admin/ProductUpdate";
 import Homescreen from "./screens/Homescreen";
 import Productscreen from "./screens/Productscreen";
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="" element={<Privateadmin />}>
           <Route path="/admin/orderlist" element={<AllOrderList />}></Route>
           <Route path="/admin/product" element={<ProductList />}></Route>
+          <Route path="/admin/user" element={<Userlist />}></Route>
           <Route path="/update/:id" element={<ProductUpdate />}></Route>
         </Route>
       </Routes>

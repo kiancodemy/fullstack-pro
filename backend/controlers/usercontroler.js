@@ -1,6 +1,7 @@
 import User from "../models/usermodel.js";
 
 import { tokenGenerator } from "../../frontend/src/utils/generatetoken.js";
+import { Error } from "mongoose";
 
 const authUser = async (req, res) => {
   try {
@@ -23,7 +24,20 @@ const authUser = async (req, res) => {
   }
 };
 
-const getUsers = async (req, res) => {};
+const getUsers = async (req, res) => {
+  try {
+    const find = await User.find();
+    if (!find) {
+      throw new Error("There is no user");
+    }
+
+    res.status(201).json(find);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message,
+    });
+  }
+};
 
 const getUserProfile = async (req, res) => {
   try {
@@ -106,11 +120,28 @@ const registerUser = async (req, res) => {
   }
 };
 const deleteUser = async (req, res) => {
-  res.send("deleteUser  ");
+  try {
+    let find = await User.findByIdAndDelete(req.params.id);
+
+    res.status(201).json(find);
+  } catch (err) {
+    res.status(401).json({
+      message: err.message,
+    });
+  }
 };
 
 const updateUser = async (req, res) => {
-  res.send("getUserById");
+  try {
+    let find = await User.findById(req.params.id);
+    find.isAdmin = find.isAdmin ? false : true;
+    const updated = await find.save();
+    res.status(201).json(updated);
+  } catch (err) {
+    res.status(401).json({
+      message: err.message,
+    });
+  }
 };
 const getUserById = async (req, res) => {};
 export {
