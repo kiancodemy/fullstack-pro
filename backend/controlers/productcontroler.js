@@ -81,4 +81,33 @@ const updatebyid = async (req, res) => {
     });
   }
 };
-export { getById, getall, deleter, AddProduct, updatebyid };
+const AddReview = async (req, res) => {
+  try {
+    let find = await products.findById(req.params.id);
+    const { rating, comment } = req.body;
+    if (!find) throw new Error("there is no product ");
+    /*const finder = find.reviews.find(
+      (item) => item.user.toString() === req.user._id.toString()
+    );
+    if (finder) {
+      throw new Error("You have already reviewd ");
+    }*/
+    const review = {
+      user: req.user._id,
+      name: req.user.name,
+      comment,
+      rating: Number(rating),
+    };
+    find.reviews.push(review);
+    find.numReviews = find.reviews.length;
+    find.rating =
+      find.reviews.reduce((acc, a) => acc + a.rating, 0) / find.reviews.length;
+    await find.save();
+    res.status(201).json(find);
+  } catch (err) {
+    res.status(401).json({
+      message: err.message,
+    });
+  }
+};
+export { getById, getall, deleter, AddProduct, updatebyid, AddReview };

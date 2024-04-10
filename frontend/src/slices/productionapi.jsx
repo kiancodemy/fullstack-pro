@@ -38,6 +38,15 @@ const productionApiSlice = apislice.injectEndpoints({
       }),
       invalidatesTags: ["Post", "Proid"],
     }),
+    AddReview: build.mutation({
+      //
+      query: ({ data, id }) => ({
+        url: `/data/addRe/${id}`,
+        method: "POST",
+        body: { ...data },
+      }),
+      invalidatesTags: ["Post", "Proid"],
+    }),
   }),
 });
 export const {
@@ -46,4 +55,5 @@ export const {
   useDeleteProductMutation,
   useCreatItemMutation,
   useUpdateProductByIdMutation,
+  useAddReviewMutation,
 } = productionApiSlice;

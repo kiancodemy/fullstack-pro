@@ -11,23 +11,55 @@ import {
   MenuItem,
   FormControl,
   CardContent,
+  TextField,
   InputLabel,
   Paper,
   Select,
 } from "@mui/material";
+import { useForm } from "react-hook-form";
 
+import { toast } from "react-toastify";
 import { Link as routerr } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useGetproductsbyidQuery } from "../slices/productionapi";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  useGetproductsbyidQuery,
+  useAddReviewMutation,
+} from "../slices/productionapi";
 import Loading from "../components/loading";
 import Error from "../components/Error";
 import { addtToCart } from "../slices/cardslice";
 
 function Productscreen() {
+  const currencies = [
+    {
+      value: "1",
+      label: "1-poor",
+    },
+    {
+      value: "2",
+      label: "2-fair",
+    },
+    {
+      value: "3",
+      label: "3-good",
+    },
+    {
+      value: "4",
+      label: "4-very good",
+    },
+    {
+      value: "5",
+      label: "5-exellent",
+    },
+  ];
+  const { userinfo } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
+  const [review] = useAddReviewMutation();
   const { id: productid } = useParams();
   const { data: finder, error, isLoading } = useGetproductsbyidQuery(productid);
 
@@ -39,6 +71,27 @@ function Productscreen() {
 
   const handleChange = (event) => {
     setQuantity(Number(event.target.value));
+  };
+  const {
+    register,
+    reset,
+    handleSubmit,
+
+    formState: { errors, isValid, isSubmitting },
+  } = useForm();
+  const submit = async (data) => {
+    try {
+      const send = await review({ data, id: productid }).unwrap();
+      console.log(send);
+      toast.success("Review Added Successfully", {
+        position: "top-right",
+      });
+      reset();
+    } catch (err) {
+      toast.error(err.data.message, {
+        position: "top-right",
+      });
+    }
   };
 
   return error ? (
@@ -186,6 +239,134 @@ function Productscreen() {
           </Paper>
         </Grid>
       </Grid>
+      {/*sscond*/}
+      <Box
+        component="form"
+        sx={{ marginTop: "10px" }}
+        onSubmit={handleSubmit(submit)}
+      >
+        <Typography
+          sx={{
+            maxWidth: "500px",
+            fontSize: "20px",
+            color: "#31363F",
+            fontWeight: "bold",
+            backgroundColor: "#CCD3CA",
+            padding: "8px",
+            borderRadius: "5px",
+          }}
+        >
+          Reviews
+        </Typography>
+        <Box
+          sx={{
+            marginY: "10px",
+            paddingY: "10px",
+            display: "flex",
+            gap: "20px",
+
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          {finder.reviews.map((item) => {
+            return (
+              <Paper
+                elevation={1}
+                key={item.user}
+                sx={{
+                  maxWidth: "300px",
+                  wordBreak: "break-all",
+
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  padding: "10px",
+                  paddingX: "15px",
+                }}
+              >
+                <Typography
+                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                >
+                  {item.name}
+                </Typography>
+                <Rating value={item.rating}></Rating>
+                <Typography>
+                  {new Date(item.createdAt)
+                    .toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })
+                    .replace(/\//g, "-")}
+                </Typography>
+                <Typography sx={{ marginTop: "10px" }}>
+                  {item.comment}
+                </Typography>
+              </Paper>
+            );
+          })}
+        </Box>
+        <Divider sx={{ backgroundColor: "#aaa" }}></Divider>
+        {userinfo?._id && (
+          <Box
+            sx={{
+              maxWidth: "500px",
+              marginTop: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "18px",
+                maxWidth: "500px",
+                color: "#31363F",
+                fontWeight: "bold",
+                textTransform: "capitalize",
+                backgroundColor: "#CCD3CA",
+                padding: "8px",
+                borderRadius: "5px",
+              }}
+            >
+              write a custome review
+            </Typography>
+            <TextField
+              {...register("rating")}
+              id="outlined-select-rating"
+              select
+              label="Rating"
+              defaultValue="1"
+            >
+              {currencies.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              {...register("comment", { required: true })}
+              required
+              id="outlined-comment"
+              label="Comment"
+            ></TextField>
+            <Button
+              variant="contained"
+              disabled={isSubmitting}
+              sx={{
+                alignSelf: "flex-start",
+                textTransform: "capitalize",
+                bgcolor: "#222831",
+                "&:hover": { backgroundColor: "#31363F" },
+              }}
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Box>
+        )}
+      </Box>
     </Container>
   );
 }
