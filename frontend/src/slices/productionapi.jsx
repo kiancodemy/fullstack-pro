@@ -3,7 +3,7 @@ import { apislice } from "./apislice";
 const productionApiSlice = apislice.injectEndpoints({
   endpoints: (build) => ({
     getproducts: build.query({
-      query: () => "/data",
+      query: (id) => `/data/?page=${id || 1}`,
       keepUnusedDataFor: 5,
       providesTags: ["Post"],
     }),

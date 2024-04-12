@@ -2,12 +2,26 @@ import products from "../models/productmodel.js";
 const getall = async (req, res) => {
   try {
     let query = products.find();
-    query.maxTimeMS(15000);
+    let limit = 2;
+    if (req.query.sort) {
+      query.sort(req.query.sort);
+    }
+
+    if (req.query.page) {
+      const page = Number(req.query.page);
+
+      query = query.limit(limit).skip((page - 1) * limit);
+    }
+
     const all = await query;
+    const count = await products.countDocuments();
+    const finalcount = Math.ceil(count / limit);
+
     if (!all) {
       throw new Error("noting has found at all");
     }
-    res.json(all);
+
+    res.json({ data: all, count: finalcount });
   } catch (err) {
     res.status(404).json({
       message: err.message,
@@ -86,12 +100,12 @@ const AddReview = async (req, res) => {
     let find = await products.findById(req.params.id);
     const { rating, comment } = req.body;
     if (!find) throw new Error("there is no product ");
-    /*const finder = find.reviews.find(
+    const finder = find.reviews.find(
       (item) => item.user.toString() === req.user._id.toString()
     );
     if (finder) {
       throw new Error("You have already reviewd ");
-    }*/
+    }
     const review = {
       user: req.user._id,
       name: req.user.name,

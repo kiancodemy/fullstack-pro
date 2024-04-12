@@ -31,3 +31,10 @@ export const admin = async (req, res, next) => {
     });
   }
 };
+export const sort = async (req, res, next) => {
+  try {
+    (req.query.sort = "-price"), next();
+  } catch (err) {
+    next(err);
+  }
+};

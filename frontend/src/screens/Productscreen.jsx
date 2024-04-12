@@ -59,7 +59,7 @@ function Productscreen() {
   const { userinfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-  const [review] = useAddReviewMutation();
+  const [review, { isLoading: isreview }] = useAddReviewMutation();
   const { id: productid } = useParams();
   const { data: finder, error, isLoading } = useGetproductsbyidQuery(productid);
 
@@ -91,12 +91,13 @@ function Productscreen() {
       toast.error(err.data.message, {
         position: "top-right",
       });
+      reset();
     }
   };
 
   return error ? (
     <Error message={error}></Error>
-  ) : isLoading ? (
+  ) : isLoading || isreview ? (
     <Loading></Loading>
   ) : (
     <Container sx={{ paddingY: "20px" }}>
@@ -276,6 +277,7 @@ function Productscreen() {
                 key={item.user}
                 sx={{
                   maxWidth: "300px",
+                  minWidth: "150px",
                   wordBreak: "break-all",
 
                   display: "flex",
@@ -308,7 +310,7 @@ function Productscreen() {
           })}
         </Box>
         <Divider sx={{ backgroundColor: "#aaa" }}></Divider>
-        {userinfo?._id && (
+        {userinfo?._id ? (
           <Box
             sx={{
               maxWidth: "500px",
@@ -321,7 +323,7 @@ function Productscreen() {
             <Typography
               sx={{
                 fontSize: "18px",
-                maxWidth: "500px",
+
                 color: "#31363F",
                 fontWeight: "bold",
                 textTransform: "capitalize",
@@ -365,6 +367,20 @@ function Productscreen() {
               Submit
             </Button>
           </Box>
+        ) : (
+          <Button
+            sx={{
+              color: "white",
+              marginTop: "10px",
+              textTransform: "capitalize",
+              bgcolor: "#222831",
+              "&:hover": { backgroundColor: "#31363F" },
+            }}
+            component={routerr}
+            to="/login"
+          >
+            Comment your experience
+          </Button>
         )}
       </Box>
     </Container>

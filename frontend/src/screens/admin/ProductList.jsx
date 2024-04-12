@@ -8,8 +8,9 @@ import {
   useCreatItemMutation,
 } from "../../slices/productionapi";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Paginations from "../Pagination";
 
-import { Link as routerr } from "react-router-dom";
+import { Link as routerr,useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import {
@@ -26,13 +27,20 @@ import {
   Paper,
   Box,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+
 function productlist() {
-  const { data: orders, error, isLoading, refetch } = useGetproductsQuery();
+  const { pages } = useParams();
+  const {
+    data: orders,
+
+    isLoading,
+  } = useGetproductsQuery(pages);
   const [create, { isLoading: iscreating }] = useCreatItemMutation();
   const [deleter, { isLoading: isdeleting }] = useDeleteProductMutation();
- 
+  const { userinfo } = useSelector((state) => state.auth);
+
   const deleteProduct = async (id) => {
-    console.log(id);
     await deleter(id);
     toast.success("Deleted Successfully", {
       position: "bottom-right",
@@ -114,7 +122,7 @@ function productlist() {
             </TableHead>
 
             <TableBody>
-              {orders.map((row, index) => (
+              {orders.data.map((row, index) => (
                 <TableRow
                   key={row._id}
                   sx={{
@@ -199,6 +207,7 @@ function productlist() {
           there is no product
         </Typography>
       )}
+      <Paginations admin={userinfo.admin} count={orders?.count}></Paginations>
     </Container>
   );
 }

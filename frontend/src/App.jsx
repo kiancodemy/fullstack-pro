@@ -4,6 +4,7 @@ import ProductUpdate from "./screens/admin/ProductUpdate";
 import Homescreen from "./screens/Homescreen";
 import Productscreen from "./screens/Productscreen";
 import Footer from "./components/Footer";
+import Carosel from "./screens/Carosel";
 import ProductList from "./screens/admin/ProductList";
 import Privateadmin from "./components/Privateadmin";
 import AllOrderList from "./screens/admin/AllOrderList";
@@ -35,6 +36,8 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Homescreen />}></Route>
+        <Route path="/c" element={<Carosel />}></Route>
+        <Route path="/page/:pages" element={<Homescreen />}></Route>
         <Route path="/product/:id" element={<Productscreen />}></Route>
         <Route path="/card" element={<Cart />}></Route>
         <Route path="/login" element={<Login />}></Route>
@@ -52,6 +55,8 @@ export default function App() {
         <Route path="" element={<Privateadmin />}>
           <Route path="/admin/orderlist" element={<AllOrderList />}></Route>
           <Route path="/admin/product" element={<ProductList />}></Route>
+          <Route path="/admin/product/:pages" element={<ProductList />}></Route>
+
           <Route path="/admin/user" element={<Userlist />}></Route>
           <Route path="/update/:id" element={<ProductUpdate />}></Route>
         </Route>

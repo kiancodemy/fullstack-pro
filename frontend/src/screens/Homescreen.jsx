@@ -11,13 +11,17 @@ import {
   CardMedia,
 } from "@mui/material";
 import { useGetproductsQuery } from "../slices/productionapi";
-
-import { Link as routerr } from "react-router-dom";
+import Paginations from "./Pagination";
+import { Link as routerr, useParams } from "react-router-dom";
 import Loading from "../components/loading";
+import { useSelector } from "react-redux";
 
 import Error from "../components/Error";
 function Homescreen() {
-  const { data: products, error, isLoading } = useGetproductsQuery();
+  const { pages } = useParams();
+
+  const { data: products, error, isLoading } = useGetproductsQuery(pages);
+  const { userinfo } = useSelector((state) => state.auth);
 
   return error ? (
     <Error message={error}></Error>
@@ -39,7 +43,7 @@ function Homescreen() {
           latest products
         </Typography>
         <Grid container sx={{ paddingY: "10px" }} spacing={2}>
-          {products.map((item) => {
+          {products.data.map((item) => {
             return (
               <Grid key={item._id} xs={12} sm={6} md={4} lg={3} item>
                 <Paper
@@ -100,6 +104,8 @@ function Homescreen() {
             );
           })}
         </Grid>
+
+        <Paginations admin={userinfo?.admin} count={products.count} />
       </Container>
     </Box>
   );
