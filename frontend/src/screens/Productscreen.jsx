@@ -24,7 +24,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import Meta from "../components/Meta";
 import {
   useGetproductsbyidQuery,
   useAddReviewMutation,
@@ -101,6 +101,7 @@ function Productscreen() {
     <Loading></Loading>
   ) : (
     <Container sx={{ paddingY: "20px" }}>
+      <Meta title={finder.name}></Meta>
       <Button
         variant="contained"
         sx={{

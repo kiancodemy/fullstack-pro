@@ -10,6 +10,7 @@ import {
   Card,
   CardMedia,
 } from "@mui/material";
+import Carosel from "./Carosel";
 import { useGetproductsQuery } from "../slices/productionapi";
 import Paginations from "./Pagination";
 import { Link as routerr, useParams } from "react-router-dom";
@@ -18,9 +19,13 @@ import { useSelector } from "react-redux";
 
 import Error from "../components/Error";
 function Homescreen() {
-  const { pages } = useParams();
+  const { pages, key } = useParams();
 
-  const { data: products, error, isLoading } = useGetproductsQuery(pages);
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useGetproductsQuery({ pages, key });
   const { userinfo } = useSelector((state) => state.auth);
 
   return error ? (
@@ -30,6 +35,7 @@ function Homescreen() {
   ) : (
     <Box sx={{ flexGrow: 1, paddingY: "10px" }}>
       <Container>
+        <Carosel></Carosel>
         <Typography
           variant="h5"
           sx={{
@@ -105,7 +111,11 @@ function Homescreen() {
           })}
         </Grid>
 
-        <Paginations admin={userinfo?.admin} count={products.count} />
+        <Paginations
+          keys={key}
+          admin={userinfo?.admin}
+          count={products.count}
+        />
       </Container>
     </Box>
   );

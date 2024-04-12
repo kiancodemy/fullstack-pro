@@ -36,7 +36,9 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Homescreen />}></Route>
-        <Route path="/c" element={<Carosel />}></Route>
+        <Route path="/search/:key" element={<Homescreen />}></Route>
+        <Route path="/search/:key/:pages" element={<Homescreen />}></Route>
+
         <Route path="/page/:pages" element={<Homescreen />}></Route>
         <Route path="/product/:id" element={<Productscreen />}></Route>
         <Route path="/card" element={<Cart />}></Route>

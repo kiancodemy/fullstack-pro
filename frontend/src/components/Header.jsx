@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -10,6 +10,7 @@ import {
   MenuItem,
   Menu,
   Container,
+  TextField,
   Typography,
   IconButton,
 } from "@mui/material";
@@ -18,11 +19,13 @@ import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 import { useLogoutMutation } from "../slices/userApiSlice";
 import { logout } from "../slices/authslice";
 import { Link as routerr } from "react-router-dom";
 import { useState } from "react";
+import { Search } from "@mui/icons-material";
 
 function Header() {
   const dispatch = useDispatch();
@@ -35,6 +38,23 @@ function Header() {
   const [out] = useLogoutMutation();
   const [open, setopen] = useState(false);
   const [opens, setopens] = useState(false);
+  ///search function//
+
+  const [initial, setinital] = useState(false);
+  const [search, setsearch] = useState("");
+
+  useEffect(() => {
+    if (initial && search) {
+      const set = setTimeout(() => {
+        navigate(`/search/${search.trim()}`);
+      }, 700);
+      return () => {
+        clearTimeout(set);
+      };
+    }
+    setinital(true);
+    navigate("/");
+  }, [search]);
   const handle = (event) => {
     setAnchorElUsers(event.currentTarget);
     setopens(true);
@@ -59,6 +79,7 @@ function Header() {
       console.log(err.message);
     }
   };
+
   return (
     <Container maxWidth="xl">
       <AppBar
@@ -87,9 +108,38 @@ function Header() {
           >
             shop store
           </Typography>
+          <Box
+            sx={{
+              borderRadius: "5px",
+              overflow: "hidden",
+              marginRight: "10px",
+            }}
+          >
+            <TextField
+              value={search}
+              onChange={(event) => {
+                setsearch(event.target.value);
+              }}
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#eee",
+                    outlineColor: "white",
+                  },
+                color: "white",
+                backgroundColor: "white",
+
+                maxWidth: "150px",
+              }}
+              placeholder="Search"
+            ></TextField>
+          </Box>
+
           <Stack
             spacing={2}
             direction="row"
+            alignItems="center"
             sx={{
               display: { xs: "none", md: "block" },
             }}

@@ -1,8 +1,13 @@
 import products from "../models/productmodel.js";
 const getall = async (req, res) => {
   try {
-    let query = products.find();
+    const key = req.query.key
+      ? { name: { $regex: req.query.key, $options: "i" } }
+      : {};
+    let query = products.find(key);
+    query = query.maxTimeMS(20000);
     let limit = 2;
+
     if (req.query.sort) {
       query.sort(req.query.sort);
     }
@@ -14,7 +19,7 @@ const getall = async (req, res) => {
     }
 
     const all = await query;
-    const count = await products.countDocuments();
+    const count = await products.countDocuments(key);
     const finalcount = Math.ceil(count / limit);
 
     if (!all) {

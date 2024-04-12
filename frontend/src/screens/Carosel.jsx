@@ -37,7 +37,7 @@ function Carosel() {
   ];
   const { data: products, error, isLoading } = useGetproductsQuery(1);
   return (
-    <Container maxWidth="md">
+    <Container sx={{ marginTop: "20px" }} maxWidth="md">
       {isLoading ? (
         <Loading></Loading>
       ) : (
@@ -74,7 +74,7 @@ function Carosel() {
                 height: "300px",
               }}
             >
-              <Box sx={{ width: "50%" }}>
+              <Box sx={{ width: { md: "50%", xs: "100%" } }}>
                 <img
                   style={{ width: "100%", objectFit: "cover", height: "100%" }}
                   src={item.image}
@@ -84,6 +84,7 @@ function Carosel() {
               <Box
                 sx={{
                   width: "50%",
+                  display: { xs: "none", md: "block" },
                   backgroundColor: "#aaa",
                 }}
               ></Box>
