@@ -21,20 +21,20 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutNavbar from "../components/Checkout";
-
+//order function //
 function Placeorder() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // api for make order
+
   const [send, { isLoading }] = useAddOrderMutation();
-  //selectors
+
   const { address, city, postalcode, country } = useSelector(
     (state) => state.cart.shippingAddress
   );
 
   const payment = useSelector((state) => state.cart.paymentmethod);
   const cart = useSelector((state) => state.cart);
-  //useeffect
+  //useeffect//
   useEffect(() => {
     if (Object.keys(cart.shippingAddress).length === 0) {
       navigate("/shipping");
@@ -43,7 +43,7 @@ function Placeorder() {
     }
   }, [cart.shippingAddress, cart.paymentmethod]);
 
-  // place order main function
+  // place order main function//
 
   const orderHandler = async () => {
     try {
@@ -69,7 +69,7 @@ function Placeorder() {
       });
     }
   };
-  //the items we choosed
+  //the items we choosed//
   const all = cart.cartItems.map((items) => (
     <Grid
       key={items.name}

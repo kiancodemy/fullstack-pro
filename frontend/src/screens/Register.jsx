@@ -38,7 +38,7 @@ function Register() {
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
-
+  //submit function//
   const onSubmit = async (data) => {
     if (data.confirmpassword !== data.password) {
       toast.error("passwords dont match", {

@@ -25,7 +25,7 @@ function Error(props) {
         go back
       </Button>
       <Alert sx={{ fontSize: "20px" }} variant="filled" severity="error">
-        {props.message.data.message}
+        {props?.message?.data.message || "error"}
       </Alert>
     </Stack>
   );

@@ -79,10 +79,11 @@ function Productscreen() {
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
+  //submit function//
   const submit = async (data) => {
     try {
       const send = await review({ data, id: productid }).unwrap();
-      console.log(send);
+
       toast.success("Review Added Successfully", {
         position: "top-right",
       });
@@ -118,7 +119,12 @@ function Productscreen() {
         <Grid item xs={12} md={4}>
           <img
             src={finder.image}
-            style={{ width: "100%", borderRadius: "10px" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "10px",
+            }}
             alt="producy-image"
           />
         </Grid>

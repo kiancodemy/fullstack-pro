@@ -51,7 +51,7 @@ function Cart() {
             fontWeight: "bold",
           }}
         >
-          cartitems is empty
+          Cart Item is empty
         </Typography>
       );
     } else {

@@ -65,9 +65,9 @@ export default function App() {
       </Routes>
       <ToastContainer
         transition={Zoom}
-        limit={3}
+        limit={1}
         theme="light"
-        autoClose={3000}
+        autoClose={2000}
       />
       <Footer></Footer>
     </Box>

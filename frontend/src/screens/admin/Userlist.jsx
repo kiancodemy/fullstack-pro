@@ -8,12 +8,9 @@ import Loading from "../../components/loading";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
 
-import { Link as routerr } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 
 import {
-  Button,
-  Grid,
   Table,
   TableHead,
   TableBody,
@@ -21,10 +18,7 @@ import {
   TableRow,
   TableCell,
   Container,
-  TextField,
-  InputAdornment,
   IconButton,
-  Typography,
   Paper,
   Box,
 } from "@mui/material";
@@ -32,7 +26,7 @@ function Userlist() {
   const { data: orders, isLoading } = useGetAllUsersQuery();
   const [updater] = useUpdateuserMutation();
   const [deleter] = useDeletedeUserMutation();
-
+  //delte user//
   const deletee = async (id) => {
     try {
       await deleter(id).unwrap();
@@ -45,7 +39,7 @@ function Userlist() {
       });
     }
   };
-
+  //update //
   const update = async (id) => {
     try {
       await updater(id).unwrap();

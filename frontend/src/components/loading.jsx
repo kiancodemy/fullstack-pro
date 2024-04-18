@@ -7,9 +7,9 @@ function Loading() {
     <Stack
       direction={"column"}
       spacing={4}
-      sx={{ height: "90vh", justifyContent: "center", alignItems: "center" }}
+      sx={{ height: "100vh", justifyContent: "center", alignItems: "center" }}
     >
-      <CircularProgress sx={{ color: "#124076" }} size={80} color="inherit" />
+      <CircularProgress sx={{ color: "#124076" }} size={60} color="inherit" />
       <Typography
         sx={{
           textTransform: "capitalize",

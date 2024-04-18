@@ -47,7 +47,16 @@ function Header() {
     if (initial && search) {
       const set = setTimeout(() => {
         navigate(`/search/${search.trim()}`);
+        const element = document.getElementById("kian");
+        if (element) {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+            inline: "nearest",
+          });
+        }
       }, 700);
+
       return () => {
         clearTimeout(set);
       };
@@ -176,7 +185,7 @@ function Header() {
               </Button>
             ) : (
               <>
-                {userinfo && userinfo.admin && (
+                {userinfo && (
                   <Button
                     onClick={handle}
                     sx={{

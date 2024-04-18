@@ -52,6 +52,7 @@ function Profile() {
   const { userinfo } = useSelector((state) => state.auth);
   const [send, { isLoading: isupdating }] = useProfileMutation();
   const dispatch = useDispatch();
+  //submit function////
   const onSubmit = async (data) => {
     if (data.password !== data.confirmpassword) {
       toast.error("Pasword And Confirm Password Should Be Same", {

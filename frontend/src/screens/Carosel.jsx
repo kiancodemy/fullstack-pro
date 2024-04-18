@@ -17,25 +17,11 @@ import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDo
 import Carousel from "react-material-ui-carousel";
 
 import { useGetproductsQuery } from "../slices/productionapi";
-import Paginations from "./Pagination";
-import { Link as routerr, useParams } from "react-router-dom";
-import Loading from "../components/loading";
-import { useSelector } from "react-redux";
 
-import Error from "../components/Error";
+import Loading from "../components/loading";
 
 function Carosel() {
-  var items = [
-    {
-      name: "Random Name #1",
-      description: "Probably the most random thing you have ever seen!",
-    },
-    {
-      name: "Random Name #2",
-      description: "Hello World!",
-    },
-  ];
-  const { data: products, error, isLoading } = useGetproductsQuery(1);
+  const { data: products, isLoading } = useGetproductsQuery(1);
   return (
     <Container sx={{ marginTop: "20px" }} maxWidth="md">
       {isLoading ? (
@@ -57,8 +43,6 @@ function Carosel() {
             display: "flex",
 
             flexDirection: "column",
-
-            gap: "20px",
           }}
         >
           {products.data.map((item, i) => (
@@ -70,24 +54,23 @@ function Carosel() {
 
                 display: "flex",
                 borderRadius: "10px",
+
                 overflow: "hidden",
-                height: "300px",
+                height: "450px",
               }}
             >
-              <Box sx={{ width: { md: "50%", xs: "100%" } }}>
+              <Box sx={{ width: { md: "100%", xs: "100%" } }}>
                 <img
-                  style={{ width: "100%", objectFit: "cover", height: "100%" }}
+                  style={{
+                    width: "100%",
+                    objectFit: "cover",
+                    height: "90%",
+                  }}
                   src={item.image}
                   alt="picture"
                 />
               </Box>
-              <Box
-                sx={{
-                  width: "50%",
-                  display: { xs: "none", md: "block" },
-                  backgroundColor: "#aaa",
-                }}
-              ></Box>
+
               <Typography
                 sx={{
                   position: "absolute",

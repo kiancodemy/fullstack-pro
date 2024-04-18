@@ -33,12 +33,12 @@ function Login() {
 
   const {
     register,
-    reset,
+
     handleSubmit,
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
-
+  //submit function//
   const onSubmit = async (data) => {
     if (isValid) {
       try {

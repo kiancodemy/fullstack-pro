@@ -6,7 +6,7 @@ const getall = async (req, res) => {
       : {};
     let query = products.find(key);
     query = query.maxTimeMS(20000);
-    let limit = 2;
+    let limit = 4;
 
     if (req.query.sort) {
       query.sort(req.query.sort);
@@ -86,12 +86,13 @@ const updatebyid = async (req, res) => {
     if (!find) {
       throw new Error("could not find the product");
     }
-    find.name = req.body.name;
-    find.price = req.body.price;
-    find.category = req.body.category;
-    find.description = req.body.description;
-    find.countInStock = req.body.countInStock;
-    find.brand = req.body.brand;
+    find.name = req.body.name || find.name;
+    find.price = req.body.price || find.price;
+    find.image = req.body.image || find.image;
+    find.category = req.body.category || find.category;
+    find.description = req.body.description || find.description;
+    find.countInStock = req.body.countInStock || find.countInStock;
+    find.brand = req.body.brand || find.brand;
     await find.save();
     res.status(201).json(find);
   } catch (err) {

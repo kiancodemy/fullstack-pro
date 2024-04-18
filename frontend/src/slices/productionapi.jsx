@@ -15,6 +15,13 @@ const productionApiSlice = apislice.injectEndpoints({
       }),
       invalidatesTags: ["Post"],
     }),
+    UploadImage: build.mutation({
+      query: (data) => ({
+        url: "/upload",
+        method: "POST",
+        body: data,
+      }),
+    }),
     CreatItem: build.mutation({
       //
       query: (item) => ({
@@ -36,10 +43,9 @@ const productionApiSlice = apislice.injectEndpoints({
         method: "PUT",
         body: { ...data },
       }),
-      invalidatesTags: ["Post", "Proid"],
+      invalidatesTags: ["Post", "proid"],
     }),
     AddReview: build.mutation({
-      //
       query: ({ data, id }) => ({
         url: `/data/addRe/${id}`,
         method: "POST",
@@ -54,6 +60,7 @@ export const {
   useGetproductsbyidQuery,
   useDeleteProductMutation,
   useCreatItemMutation,
+  useUploadImageMutation,
   useUpdateProductByIdMutation,
   useAddReviewMutation,
 } = productionApiSlice;

@@ -10,7 +10,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import Paginations from "../Pagination";
 
-import { Link as routerr,useParams } from "react-router-dom";
+import { Link as routerr, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import {
@@ -28,24 +28,25 @@ import {
   Box,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-
+//reac--hook-form//
 function productlist() {
   const { pages } = useParams();
   const {
     data: orders,
 
     isLoading,
-  } = useGetproductsQuery(pages);
+  } = useGetproductsQuery({ pages });
   const [create, { isLoading: iscreating }] = useCreatItemMutation();
   const [deleter, { isLoading: isdeleting }] = useDeleteProductMutation();
   const { userinfo } = useSelector((state) => state.auth);
-
+  //delte product//
   const deleteProduct = async (id) => {
     await deleter(id);
     toast.success("Deleted Successfully", {
       position: "bottom-right",
     });
   };
+  //create product//
 
   const createproduct = async () => {
     if (window.confirm("Are you sure you want to create product"))
@@ -93,7 +94,7 @@ function productlist() {
           create product
         </Button>
       </Box>
-      {isLoading ? (
+      {isLoading || iscreating || isdeleting ? (
         <Loading></Loading>
       ) : (
         <TableContainer component={Paper}>

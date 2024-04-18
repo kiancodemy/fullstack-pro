@@ -32,8 +32,6 @@ import { useSelector } from "react-redux";
 import Loading from "../components/loading";
 
 function Orderscreen() {
-  //queries
-
   const navigate = useNavigate();
   const { id: orderId } = useParams();
   const [{ isPending }, dispatch] = usePayPalScriptReducer();
@@ -52,7 +50,7 @@ function Orderscreen() {
     isLoading: paypalloading,
     error: paypalerror,
   } = usePaypalIdQuery();
-  //handle paypal button//
+
   ///handle deliver by admin
   const handledeliver = async () => {
     try {
@@ -101,7 +99,7 @@ function Orderscreen() {
       ],
     });
   }
-  function onApprove(data, actions) {
+  /*function onApprove(data, actions) {
     return actions.order.capture().then(async function (data) {
       try {
         const order = await payorder({ id: orderId, data });
@@ -116,10 +114,10 @@ function Orderscreen() {
         });
       }
     });
-  }
-  function onerror() {}
+  }*/
+
   //useeffect
-  useEffect(() => {
+  /*useEffect(() => {
     if (!paypalerror && !paypalloading && data.clientId) {
       const get = async () => {
         dispatch({
@@ -137,7 +135,7 @@ function Orderscreen() {
         }
       }
     }
-  }, [paypalerror, paypalloading, data, order]);
+  }, [paypalerror, paypalloading, data, order]);*/
 
   return isLoading ? (
     <Loading />
@@ -428,7 +426,7 @@ function Orderscreen() {
                   variant="contained"
                   type="submit"
                 >
-                  test payorder
+                  Pay Now (test mode)
                 </Button>
                 {userinfo &&
                   userinfo.admin &&
@@ -451,14 +449,14 @@ function Orderscreen() {
                     </Button>
                   )}
 
-                {!order.isPaid && (
+                {/*{!order.isPaid && (
                   <PayPalButtons
                     style={style}
                     createOrder={createOrder}
                     onApprove={onApprove}
                     onError={onerror}
                   ></PayPalButtons>
-                )}
+                )}*/}
               </Box>
             )}
           </Paper>

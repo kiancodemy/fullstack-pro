@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import Loading from "../../components/loading";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useState } from "react";
 import { Link as routerr, useNavigate } from "react-router-dom";
 import {
   useGetproductsbyidQuery,
+  useUploadImageMutation,
   useUpdateProductByIdMutation,
 } from "../../slices/productionapi";
 import { toast } from "react-toastify";
@@ -17,6 +18,9 @@ import {
   Box,
 } from "@mui/material";
 function ProductUpdate() {
+  const { id } = useParams();
+  const { data, isLoading } = useGetproductsbyidQuery(id);
+  const [image, setimage] = useState();
   const navigate = useNavigate();
   const {
     register,
@@ -25,19 +29,35 @@ function ProductUpdate() {
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
-  const { id } = useParams();
-  const { data, isLoading } = useGetproductsbyidQuery(id);
-  const [updater, { isLoading: isupdating }] = useUpdateProductByIdMutation();
 
+  const [updater, { isLoading: isupdating }] = useUpdateProductByIdMutation();
+  const [uploadImage] = useUploadImageMutation();
+  const handleFileChange = async (e) => {
+    const formData = new FormData();
+
+    formData.append("image", e.target.files[0]);
+
+    try {
+      const res = await uploadImage(formData).unwrap();
+      setimage(res.path);
+      toast.success(res.message, {
+        position: "top-right",
+      });
+    } catch (err) {
+      toast.error(err.data.message, {
+        position: "top-right",
+      });
+    }
+  };
+  //submit form//
   const submit = async (data) => {
     try {
       data.price = Number(data.price);
       data.countInStock = Number(data.countInStock);
-      console.log(data.price);
-      console.log(data.countInStock);
 
       if (data.price && data.countInStock) {
-        await updater({ data, id }).unwrap();
+        await updater({ data: { ...data, image }, id }).unwrap();
+        console.log({ ...data, image });
         toast.success("Updated successfully", {
           position: "top-right",
         });
@@ -95,7 +115,7 @@ function ProductUpdate() {
         Edit product
       </Typography>
 
-      {isLoading ? (
+      {isLoading || isupdating ? (
         <Loading></Loading>
       ) : (
         <Box sx={{ display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -136,9 +156,17 @@ function ProductUpdate() {
             autoComplete="current-password"
           />
           <TextField
+            id="outlinedrr"
+            value={image}
+            label="Adress"
+            type="text"
+            variant="outlined"
+          />
+          <TextField
             type="file"
             label="upload the image"
             name="image"
+            onChange={handleFileChange}
             InputLabelProps={{
               shrink: true,
             }}
