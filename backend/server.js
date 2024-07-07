@@ -32,7 +32,7 @@ app.get("/config/paypal", async (req, res) => {
   res.send({ clientId: process.env.PAYPAL });
 });
 
-app.use(express.static(path.join(__dirname, "..", "/frontend/build")));
+app.use(express.static(path.join(__dirname, "..", "/frontend/dist")));
 
 app.use("/uploads", express.static(path.join(__dirname, "..", "/upload")));
 
@@ -40,7 +40,7 @@ connect();
 app.get("*", (req, res) => {
   if (process.env.ENVIRENMENT !== "development") {
     res.sendFile(
-      path.join(path.join(__dirname, "..", "/frontend/build/index.html"))
+      path.join(path.join(__dirname, "..", "/frontend/dist/index.html"))
     );
   }
 });
