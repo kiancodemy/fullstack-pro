@@ -3,7 +3,12 @@ import { apislice } from "./apislice";
 const productionApiSlice = apislice.injectEndpoints({
   endpoints: (build) => ({
     getproducts: build.query({
-      query: ({ pages, key }) => `/data/?page=${pages || 1}&key=${key || ""}`,
+      query: ({ pages, key }) => {
+        return {
+          url: `/data/?page=${pages || 1}&key=${key || ""}`,
+          credentials: "include",
+        };
+      },
       keepUnusedDataFor: 5,
       providesTags: ["Post"],
     }),
@@ -11,6 +16,7 @@ const productionApiSlice = apislice.injectEndpoints({
       //
       query: (id) => ({
         url: `/data/delete/${id}`,
+        credentials: "include",
         method: "DELETE",
       }),
       invalidatesTags: ["Post"],
@@ -18,6 +24,7 @@ const productionApiSlice = apislice.injectEndpoints({
     UploadImage: build.mutation({
       query: (data) => ({
         url: "/upload",
+        credentials: "include",
         method: "POST",
         body: data,
       }),
@@ -26,14 +33,15 @@ const productionApiSlice = apislice.injectEndpoints({
       //
       query: (item) => ({
         url: "/data",
+        credentials: "include",
         method: "POST",
         body: { ...item },
       }),
       invalidatesTags: ["Post"],
     }),
     getproductsbyid: build.query({
-      query: (id) => `/data/${id}`,
-      keepUnusedDataFor: 5,
+      query: (id) => ({ url: `/data/${id}`, credentials: "include" }),
+
       providesTags: ["Proid"],
     }),
     UpdateProductById: build.mutation({
@@ -41,6 +49,7 @@ const productionApiSlice = apislice.injectEndpoints({
       query: ({ data, id }) => ({
         url: `/data/${id}`,
         method: "PUT",
+        credentials: "include",
         body: { ...data },
       }),
       invalidatesTags: ["Post", "proid"],
@@ -49,6 +58,7 @@ const productionApiSlice = apislice.injectEndpoints({
       query: ({ data, id }) => ({
         url: `/data/addRe/${id}`,
         method: "POST",
+        credentials: "include",
         body: { ...data },
       }),
       invalidatesTags: ["Post", "Proid"],

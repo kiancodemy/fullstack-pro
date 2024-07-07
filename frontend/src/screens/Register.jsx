@@ -9,7 +9,7 @@ import {
 import { Link as routerr } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,11 +20,11 @@ import { useEffect } from "react";
 function Register() {
   const { userinfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const redirect = params.get("redirect") || "/";
+
   const [registerr, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
+  let [searchParams, setSearchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   useEffect(() => {
     if (userinfo) {
       navigate(redirect);
@@ -33,7 +33,7 @@ function Register() {
 
   const {
     register,
-    reset,
+
     handleSubmit,
 
     formState: { errors, isValid, isSubmitting },

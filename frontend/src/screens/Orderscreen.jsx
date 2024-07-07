@@ -45,11 +45,11 @@ function Orderscreen() {
     isLoading,
     refetch,
   } = useGetOrderDetailQuery(orderId);
-  const {
+  /*const {
     data,
     isLoading: paypalloading,
     error: paypalerror,
-  } = usePaypalIdQuery();
+  } = usePaypalIdQuery();*/
 
   ///handle deliver by admin
   const handledeliver = async () => {

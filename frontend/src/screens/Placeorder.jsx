@@ -1,14 +1,11 @@
 import {
   Button,
   Container,
-  TextField,
   Typography,
   Link,
   Grid,
   Paper,
   Box,
-  Divider,
-  Stack,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useAddOrderMutation } from "../slices/orderApislice";
@@ -78,12 +75,13 @@ function Placeorder() {
       sx={{
         paddingBottom: "15px",
         paddingX: "15px",
+
         alignItems: "center",
         borderBottom: "3px solid",
         borderColor: "#aaa",
       }}
     >
-      <Grid item xs={2}>
+      <Grid item xs={3}>
         <img
           style={{
             borderRadius: "5px",

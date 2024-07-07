@@ -6,7 +6,9 @@ const userApiSlice = apislice.injectEndpoints({
       //
       query: (data) => ({
         url: `/users/login`,
+        credentials: "include",
         method: "POST",
+
         body: data,
       }),
     }),
@@ -15,6 +17,7 @@ const userApiSlice = apislice.injectEndpoints({
       query: () => ({
         url: `/users/logout`,
         method: "POST",
+        credentials: "include",
       }),
     }),
     register: build.mutation({
@@ -22,6 +25,7 @@ const userApiSlice = apislice.injectEndpoints({
       query: (data) => ({
         url: `/users`,
         method: "POST",
+        credentials: "include",
         body: data,
       }),
     }),
@@ -30,6 +34,7 @@ const userApiSlice = apislice.injectEndpoints({
       query: (data) => ({
         url: `/users/profile`,
         method: "PUT",
+        credentials: "include",
         body: data,
       }),
     }),
@@ -38,6 +43,7 @@ const userApiSlice = apislice.injectEndpoints({
       query: (id) => ({
         url: `/users/${id}`,
         method: "PUT",
+        credentials: "include",
       }),
       invalidatesTags: ["All"],
     }),
@@ -46,17 +52,20 @@ const userApiSlice = apislice.injectEndpoints({
       query: (id) => ({
         url: `/users/${id}`,
         method: "DELETE",
+        credentials: "include",
       }),
       invalidatesTags: ["All"],
     }),
     myorders: build.query({
       query: () => ({
         url: `/orders/mine`,
+        credentials: "include",
       }),
     }),
     GetAllUsers: build.query({
       query: () => ({
         url: "/users",
+        credentials: "include",
       }),
       providesTags: ["All"],
     }),

@@ -29,6 +29,7 @@ function Paymentscreen() {
   const handle = (e) => {
     setvalue(e.target.value);
   };
+  //function for submiting and go to place order section//
   const submit = (e) => {
     e.preventDefault();
     if (value) {

@@ -1,12 +1,4 @@
-import {
-  Button,
-  Container,
-  TextField,
-  Typography,
-  Paper,
-  Box,
-  Stack,
-} from "@mui/material";
+import { Button, Container, TextField, Typography, Stack } from "@mui/material";
 import { Link as routerr } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,18 +9,24 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckoutNavbar from "../components/Checkout";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+
 function Shippingscreen() {
+  const navigate = useNavigate();
+  const dipatch = useDispatch();
+  //react -hook form//
+
   const {
     register,
-    reset,
+
     handleSubmit,
 
     formState: { errors, isValid, isSubmitting },
   } = useForm();
 
-  const navigate = useNavigate();
-  const dipatch = useDispatch();
+  //address finder//
+
   const { shippingAddress } = useSelector((state) => state.cart);
+  //card items//
   const { cartItems } = useSelector((state) => state.cart);
   useEffect(() => {
     if (cartItems.length === 0) {

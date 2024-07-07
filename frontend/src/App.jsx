@@ -4,7 +4,7 @@ import ProductUpdate from "./screens/admin/ProductUpdate";
 import Homescreen from "./screens/Homescreen";
 import Productscreen from "./screens/Productscreen";
 import Footer from "./components/Footer";
-import Carosel from "./screens/Carosel";
+
 import ProductList from "./screens/admin/ProductList";
 import Privateadmin from "./components/Privateadmin";
 import AllOrderList from "./screens/admin/AllOrderList";
@@ -26,6 +26,7 @@ export default function App() {
     <Box
       sx={{
         minHeight: "95vh",
+        backgroundColor: "#fff",
 
         display: "flex",
         flexDirection: "column",

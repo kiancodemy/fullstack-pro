@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+
 import {
   Container,
   Grid,
@@ -24,11 +25,15 @@ import { toast } from "react-toastify";
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // information about the product we selected//
   const totalprice = useSelector((state) => state.cart.totalPrice);
   const total = useSelector((state) =>
     state.cart.cartItems.reduce((acc, item) => acc + item.qty, 0)
   );
   const cartItems = useSelector((state) => state.cart.cartItems);
+
+  // handle going to the check out section  //
   const handler = () => {
     if (cartItems.length === 0) {
       toast.error("Cart Item Is Empty", {
@@ -36,7 +41,6 @@ function Cart() {
       });
     } else {
       navigate("/shipping");
-      // navigate(`/order/${res._id}`);
     }
   };
   const AllProducts = useMemo(() => {

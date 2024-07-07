@@ -7,6 +7,7 @@ const orderApiSlice = apislice.injectEndpoints({
       query: (data) => ({
         url: `/orders`,
         method: "POST",
+        credentials: "include",
         body: { ...data },
       }),
     }),
@@ -15,6 +16,7 @@ const orderApiSlice = apislice.injectEndpoints({
       query: ({ id, data }) => ({
         url: `/orders/${id}/pay`,
         method: "PUT",
+        credentials: "include",
         body: { ...data },
       }),
     }),
@@ -23,12 +25,14 @@ const orderApiSlice = apislice.injectEndpoints({
       query: (id) => ({
         url: `/orders/${id}/delivered`,
         method: "PUT",
+        credentials: "include",
       }),
     }),
     getOrderDetail: build.query({
       //
       query: (id) => ({
         url: `/orders/${id}`,
+        credentials: "include",
       }),
       keepUnusedDataFor: 5,
     }),
@@ -36,12 +40,14 @@ const orderApiSlice = apislice.injectEndpoints({
       //
       query: () => ({
         url: "/config/paypal",
+        credentials: "include",
       }),
       keepUnusedDataFor: 5,
     }),
     getallorders: build.query({
       query: () => ({
         url: "/orders",
+        credentials: "include",
       }),
       keepUnusedDataFor: 5,
     }),

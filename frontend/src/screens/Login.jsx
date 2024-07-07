@@ -8,8 +8,9 @@ import {
 } from "@mui/material";
 import { Link as routerr } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,10 +20,10 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 function Login() {
   const { userinfo } = useSelector((state) => state.auth);
+  let [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const redirect = params.get("redirect") || "/";
+
+  const redirect = searchParams.get("redirect") || "/";
   const [log, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
   useEffect(() => {

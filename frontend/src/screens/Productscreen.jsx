@@ -1,5 +1,4 @@
 import {
-  Link,
   Rating,
   Box,
   Container,
@@ -12,7 +11,6 @@ import {
   FormControl,
   CardContent,
   TextField,
-  InputLabel,
   Paper,
   Select,
 } from "@mui/material";
@@ -22,7 +20,7 @@ import { toast } from "react-toastify";
 import { Link as routerr } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { useDispatch, useSelector } from "react-redux";
 import Meta from "../components/Meta";
 import {
@@ -32,6 +30,7 @@ import {
 import Loading from "../components/loading";
 import Error from "../components/Error";
 import { addtToCart } from "../slices/cardslice";
+///review info//
 
 function Productscreen() {
   const currencies = [
@@ -56,22 +55,36 @@ function Productscreen() {
       label: "5-exellent",
     },
   ];
+
+  //user infromation
   const { userinfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const [review, { isLoading: isreview }] = useAddReviewMutation();
+
+  //find product of id
   const { id: productid } = useParams();
+
+  //rtk for find the specific product
   const { data: finder, error, isLoading } = useGetproductsbyidQuery(productid);
 
+  //change the quantity of product
+
   const [Quantity, setQuantity] = useState(1);
+
+  //function for add item to cart//
 
   const handleAddToCart = () => {
     dispatch(addtToCart({ ...finder, qty: Number(Quantity) }));
   };
 
+  // quantity controler
+
   const handleChange = (event) => {
     setQuantity(Number(event.target.value));
   };
+
+  // react-hook-fomrm //
   const {
     register,
     reset,
@@ -82,7 +95,7 @@ function Productscreen() {
   //submit function//
   const submit = async (data) => {
     try {
-      const send = await review({ data, id: productid }).unwrap();
+      await review({ data, id: productid }).unwrap();
 
       toast.success("Review Added Successfully", {
         position: "top-right",

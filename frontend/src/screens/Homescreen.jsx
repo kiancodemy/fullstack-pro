@@ -10,6 +10,7 @@ import {
   Card,
   CardMedia,
 } from "@mui/material";
+
 import Carosel from "./Carosel";
 import { useGetproductsQuery } from "../slices/productionapi";
 import Paginations from "./Pagination";
@@ -21,11 +22,15 @@ import Error from "../components/Error";
 function Homescreen() {
   const { pages, key } = useParams();
 
+  //function for pagination//
+
   const {
     data: products,
     error,
     isLoading,
   } = useGetproductsQuery({ pages, key });
+
+  //rtk for user information
   const { userinfo } = useSelector((state) => state.auth);
 
   return error ? (
@@ -39,11 +44,14 @@ function Homescreen() {
         <Typography
           variant="h5"
           sx={{
+            marginY: "20px",
             textTransform: "capitalize",
             fontWeight: "bold",
+            paddingX: "10px",
             paddingY: "10px",
             fontSize: "30px",
             color: "#607274",
+            borderBottom: "2px solid #ddd",
           }}
         >
           latest products

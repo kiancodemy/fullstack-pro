@@ -6,7 +6,7 @@ const getall = async (req, res) => {
       : {};
     let query = products.find(key);
     query = query.maxTimeMS(20000);
-    let limit = 4;
+    let limit = 8;
 
     if (req.query.sort) {
       query.sort(req.query.sort);

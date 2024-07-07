@@ -1,16 +1,4 @@
-import {
-  Box,
-  Grid,
-  Typography,
-  Container,
-  CardContent,
-  Rating,
-  Paper,
-  Button,
-  Link,
-  Card,
-  CardMedia,
-} from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
 import React from "react";
 import KeyboardDoubleArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowLeftOutlined";
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
